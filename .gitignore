@@ -1,0 +1,8 @@
+.venv/
+*.bin
+*.png
+*.pt
+*.txt
+*.csv
+*.pyc
+data_aug/mecab/
