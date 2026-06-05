@@ -1,0 +1,87 @@
+--- Phase 2 미세 조정 시작 (Device: cuda) ---
+--- 분할된 Phase 2 데이터 로드 중 ---
+Epoch 001 | T-Loss: 0.7226 | V-Loss: 0.8319 | V-Acc: 0.7066
+Epoch 002 | T-Loss: 0.6744 | V-Loss: 0.8141 | V-Acc: 0.7254
+⭐️ [갱신] 최고 정확도: 0.7254
+Epoch 003 | T-Loss: 0.6409 | V-Loss: 0.8074 | V-Acc: 0.7347
+⭐️ [갱신] 최고 정확도: 0.7347
+Epoch 004 | T-Loss: 0.6129 | V-Loss: 0.8254 | V-Acc: 0.7113
+Epoch 005 | T-Loss: 0.5920 | V-Loss: 0.8177 | V-Acc: 0.7324
+Epoch 006 | T-Loss: 0.5698 | V-Loss: 0.7797 | V-Acc: 0.7371
+⭐️ [갱신] 최고 정확도: 0.7371
+Epoch 007 | T-Loss: 0.5548 | V-Loss: 0.7797 | V-Acc: 0.7441
+⭐️ [갱신] 최고 정확도: 0.7441
+Epoch 008 | T-Loss: 0.5310 | V-Loss: 0.7733 | V-Acc: 0.7441
+Epoch 009 | T-Loss: 0.5091 | V-Loss: 0.8152 | V-Acc: 0.7160
+Epoch 010 | T-Loss: 0.4988 | V-Loss: 0.7979 | V-Acc: 0.7254
+Epoch 011 | T-Loss: 0.4881 | V-Loss: 0.7741 | V-Acc: 0.7512
+⭐️ [갱신] 최고 정확도: 0.7512
+Epoch 012 | T-Loss: 0.4769 | V-Loss: 0.8078 | V-Acc: 0.7183
+Epoch 013 | T-Loss: 0.4714 | V-Loss: 0.7753 | V-Acc: 0.7488
+Epoch 014 | T-Loss: 0.4609 | V-Loss: 0.7674 | V-Acc: 0.7606
+⭐️ [갱신] 최고 정확도: 0.7606
+Epoch 015 | T-Loss: 0.4596 | V-Loss: 0.7901 | V-Acc: 0.7418
+Epoch 016 | T-Loss: 0.4556 | V-Loss: 0.8082 | V-Acc: 0.7324
+Epoch 017 | T-Loss: 0.4575 | V-Loss: 0.7783 | V-Acc: 0.7488
+Epoch 018 | T-Loss: 0.4483 | V-Loss: 0.7854 | V-Acc: 0.7535
+Epoch 019 | T-Loss: 0.4542 | V-Loss: 0.7761 | V-Acc: 0.7488
+Epoch 020 | T-Loss: 0.4415 | V-Loss: 0.7959 | V-Acc: 0.7300
+Epoch 021 | T-Loss: 0.4422 | V-Loss: 0.7758 | V-Acc: 0.7512
+Epoch 022 | T-Loss: 0.4402 | V-Loss: 0.7780 | V-Acc: 0.7465
+Epoch 023 | T-Loss: 0.4365 | V-Loss: 0.7924 | V-Acc: 0.7441
+Epoch 024 | T-Loss: 0.4341 | V-Loss: 0.7715 | V-Acc: 0.7723
+⭐️ [갱신] 최고 정확도: 0.7723
+Epoch 025 | T-Loss: 0.4353 | V-Loss: 0.7865 | V-Acc: 0.7512
+Epoch 026 | T-Loss: 0.4386 | V-Loss: 0.7833 | V-Acc: 0.7512
+Epoch 027 | T-Loss: 0.4428 | V-Loss: 0.8002 | V-Acc: 0.7230
+Epoch 028 | T-Loss: 0.4437 | V-Loss: 0.8068 | V-Acc: 0.7254
+Epoch 029 | T-Loss: 0.4436 | V-Loss: 0.7936 | V-Acc: 0.7300
+Epoch 030 | T-Loss: 0.4341 | V-Loss: 0.7971 | V-Acc: 0.7418
+Epoch 031 | T-Loss: 0.4485 | V-Loss: 0.7945 | V-Acc: 0.7277
+Epoch 032 | T-Loss: 0.4410 | V-Loss: 0.7914 | V-Acc: 0.7465
+Epoch 033 | T-Loss: 0.4348 | V-Loss: 0.8066 | V-Acc: 0.7254
+Epoch 034 | T-Loss: 0.4341 | V-Loss: 0.7833 | V-Acc: 0.7488
+Epoch 035 | T-Loss: 0.4326 | V-Loss: 0.7930 | V-Acc: 0.7371
+Epoch 036 | T-Loss: 0.4327 | V-Loss: 0.7903 | V-Acc: 0.7441
+Epoch 037 | T-Loss: 0.4391 | V-Loss: 0.8255 | V-Acc: 0.7183
+Epoch 038 | T-Loss: 0.4315 | V-Loss: 0.7991 | V-Acc: 0.7324
+Epoch 039 | T-Loss: 0.4379 | V-Loss: 0.7774 | V-Acc: 0.7535
+Epoch 040 | T-Loss: 0.4343 | V-Loss: 0.7831 | V-Acc: 0.7488
+Epoch 041 | T-Loss: 0.4344 | V-Loss: 0.8032 | V-Acc: 0.7324
+Epoch 042 | T-Loss: 0.4333 | V-Loss: 0.8226 | V-Acc: 0.7207
+Epoch 043 | T-Loss: 0.4325 | V-Loss: 0.7739 | V-Acc: 0.7606
+Epoch 044 | T-Loss: 0.4370 | V-Loss: 0.8157 | V-Acc: 0.7183
+Epoch 045 | T-Loss: 0.4398 | V-Loss: 0.7897 | V-Acc: 0.7465
+Epoch 046 | T-Loss: 0.4404 | V-Loss: 0.7904 | V-Acc: 0.7465
+Epoch 047 | T-Loss: 0.4367 | V-Loss: 0.8049 | V-Acc: 0.7277
+Epoch 048 | T-Loss: 0.4358 | V-Loss: 0.7902 | V-Acc: 0.7465
+Epoch 049 | T-Loss: 0.4287 | V-Loss: 0.7927 | V-Acc: 0.7465
+Epoch 050 | T-Loss: 0.4360 | V-Loss: 0.7857 | V-Acc: 0.7465
+Epoch 051 | T-Loss: 0.4332 | V-Loss: 0.7890 | V-Acc: 0.7371
+Epoch 052 | T-Loss: 0.4402 | V-Loss: 0.7904 | V-Acc: 0.7347
+Epoch 053 | T-Loss: 0.4367 | V-Loss: 0.7794 | V-Acc: 0.7535
+Epoch 054 | T-Loss: 0.4417 | V-Loss: 0.7892 | V-Acc: 0.7512
+Epoch 055 | T-Loss: 0.4311 | V-Loss: 0.7890 | V-Acc: 0.7441
+Epoch 056 | T-Loss: 0.4384 | V-Loss: 0.8079 | V-Acc: 0.7230
+Epoch 057 | T-Loss: 0.4346 | V-Loss: 0.7882 | V-Acc: 0.7465
+Epoch 058 | T-Loss: 0.4300 | V-Loss: 0.7919 | V-Acc: 0.7324
+Epoch 059 | T-Loss: 0.4312 | V-Loss: 0.7724 | V-Acc: 0.7629
+Epoch 060 | T-Loss: 0.4325 | V-Loss: 0.7944 | V-Acc: 0.7324
+Epoch 061 | T-Loss: 0.4336 | V-Loss: 0.8224 | V-Acc: 0.7160
+Epoch 062 | T-Loss: 0.4381 | V-Loss: 0.8042 | V-Acc: 0.7324
+Epoch 063 | T-Loss: 0.4362 | V-Loss: 0.7888 | V-Acc: 0.7347
+Epoch 064 | T-Loss: 0.4311 | V-Loss: 0.7836 | V-Acc: 0.7465
+Epoch 065 | T-Loss: 0.4418 | V-Loss: 0.7814 | V-Acc: 0.7582
+Epoch 066 | T-Loss: 0.4349 | V-Loss: 0.7789 | V-Acc: 0.7606
+Epoch 067 | T-Loss: 0.4380 | V-Loss: 0.7956 | V-Acc: 0.7324
+Epoch 068 | T-Loss: 0.4381 | V-Loss: 0.7747 | V-Acc: 0.7606
+Epoch 069 | T-Loss: 0.4261 | V-Loss: 0.7701 | V-Acc: 0.7559
+Epoch 070 | T-Loss: 0.4421 | V-Loss: 0.7906 | V-Acc: 0.7488
+Epoch 071 | T-Loss: 0.4324 | V-Loss: 0.8044 | V-Acc: 0.7324
+Epoch 072 | T-Loss: 0.4384 | V-Loss: 0.7989 | V-Acc: 0.7347
+Epoch 073 | T-Loss: 0.4247 | V-Loss: 0.7782 | V-Acc: 0.7535
+Epoch 074 | T-Loss: 0.4340 | V-Loss: 0.8088 | V-Acc: 0.7207
+🛑 조기 종료 (Early Stopping)
+
+==============================
+--- 최종 Test 세트 평가 (Best Model) ---

@@ -1,0 +1,45 @@
+title_weight=10.0
+comment_weight=0.5
+dropout=0.3
+
+Current Device: cuda
+
+[데이터 분할 시작] 전체 샘플 수: 1263개
+  - 학습(Train) 데이터: 1010개
+  - 검증(Validation) 데이터: 126개
+  - 테스트(Test) 데이터: 127개
+Loading KcBERT model: beomi/KcELECTRA-base...
+
+[Start Training & Validation]
+Epoch 1/15 | Train Loss: 0.9892 | Train Acc: 0.4723 | Val Loss: 0.9872 | Val Acc: 0.4683
+-> [모델 저장] 검증 정확도 0.4683 달성, emergency/asdf5.pt에 저장.
+Epoch 2/15 | Train Loss: 0.9737 | Train Acc: 0.4782 | Val Loss: 0.9514 | Val Acc: 0.4762
+-> [모델 저장] 검증 정확도 0.4762 달성, emergency/asdf5.pt에 저장.
+Epoch 3/15 | Train Loss: 0.9525 | Train Acc: 0.5010 | Val Loss: 0.9065 | Val Acc: 0.5635
+-> [모델 저장] 검증 정확도 0.5635 달성, emergency/asdf5.pt에 저장.
+Epoch 4/15 | Train Loss: 0.8494 | Train Acc: 0.6059 | Val Loss: 0.8198 | Val Acc: 0.6111
+-> [모델 저장] 검증 정확도 0.6111 달성, emergency/asdf5.pt에 저장.
+Epoch 5/15 | Train Loss: 0.6386 | Train Acc: 0.7436 | Val Loss: 0.8402 | Val Acc: 0.6032
+Epoch 6/15 | Train Loss: 0.4102 | Train Acc: 0.8396 | Val Loss: 1.0132 | Val Acc: 0.6032
+Epoch 7/15 | Train Loss: 0.2593 | Train Acc: 0.8990 | Val Loss: 1.2620 | Val Acc: 0.6190
+-> [모델 저장] 검증 정확도 0.6190 달성, emergency/asdf5.pt에 저장.
+Epoch 8/15 | Train Loss: 0.2178 | Train Acc: 0.9228 | Val Loss: 1.2447 | Val Acc: 0.6349
+-> [모델 저장] 검증 정확도 0.6349 달성, emergency/asdf5.pt에 저장.
+Epoch 9/15 | Train Loss: 0.1486 | Train Acc: 0.9475 | Val Loss: 1.3868 | Val Acc: 0.5952
+Epoch 10/15 | Train Loss: 0.1246 | Train Acc: 0.9644 | Val Loss: 1.4013 | Val Acc: 0.6190
+Epoch 11/15 | Train Loss: 0.1010 | Train Acc: 0.9743 | Val Loss: 1.3906 | Val Acc: 0.6667
+-> [모델 저장] 검증 정확도 0.6667 달성, emergency/asdf5.pt에 저장.
+Epoch 12/15 | Train Loss: 0.1445 | Train Acc: 0.9574 | Val Loss: 1.1327 | Val Acc: 0.6984
+-> [모델 저장] 검증 정확도 0.6984 달성, emergency/asdf5.pt에 저장.
+Epoch 13/15 | Train Loss: 0.0495 | Train Acc: 0.9871 | Val Loss: 1.3452 | Val Acc: 0.6587
+Epoch 14/15 | Train Loss: 0.0320 | Train Acc: 0.9921 | Val Loss: 1.4650 | Val Acc: 0.6508
+Epoch 15/15 | Train Loss: 0.0322 | Train Acc: 0.9901 | Val Loss: 1.6254 | Val Acc: 0.6667
+
+--- 학습 완료 ---
+✅ Loss PLOT 저장 완료.
+✅ ACC PLOT 저장 완료.
+
+[Start Final Test on Test Set]
+
+=== 최종 테스트 결과 ===
+Test Accuracy: 0.6378 (Total 127 Samples)

@@ -1,0 +1,43 @@
+title_weight=10.0
+comment_weight=1.00
+dropout=0.3
+base-dropout=0.2
+
+Current Device: cuda
+
+[데이터 분할 시작] 전체 샘플 수: 1263개
+  - 학습(Train) 데이터: 1010개
+  - 검증(Validation) 데이터: 126개
+  - 테스트(Test) 데이터: 127개
+Loading KcBERT model: beomi/KcELECTRA-base...
+
+[Start Training & Validation]
+Epoch 1/15 | Train Loss: 0.9886 | Train Acc: 0.4644 | Val Loss: 0.9942 | Val Acc: 0.4683
+-> [모델 저장] 검증 정확도 0.4683 달성, emergency/asdf7.pt에 저장.
+Epoch 2/15 | Train Loss: 0.9773 | Train Acc: 0.4594 | Val Loss: 0.9781 | Val Acc: 0.4683
+Epoch 3/15 | Train Loss: 0.9742 | Train Acc: 0.4812 | Val Loss: 0.9890 | Val Acc: 0.4683
+Epoch 4/15 | Train Loss: 0.9695 | Train Acc: 0.4743 | Val Loss: 0.9816 | Val Acc: 0.4683
+Epoch 5/15 | Train Loss: 0.9677 | Train Acc: 0.4733 | Val Loss: 0.9642 | Val Acc: 0.5000
+-> [모델 저장] 검증 정확도 0.5000 달성, emergency/asdf7.pt에 저장.
+Epoch 6/15 | Train Loss: 0.9317 | Train Acc: 0.5386 | Val Loss: 0.9602 | Val Acc: 0.4921
+Epoch 7/15 | Train Loss: 0.8398 | Train Acc: 0.6119 | Val Loss: 1.0518 | Val Acc: 0.4603
+Epoch 8/15 | Train Loss: 0.6969 | Train Acc: 0.7168 | Val Loss: 0.9940 | Val Acc: 0.5556
+-> [모델 저장] 검증 정확도 0.5556 달성, emergency/asdf7.pt에 저장.
+Epoch 9/15 | Train Loss: 0.5149 | Train Acc: 0.8109 | Val Loss: 0.9458 | Val Acc: 0.6111
+-> [모델 저장] 검증 정확도 0.6111 달성, emergency/asdf7.pt에 저장.
+Epoch 10/15 | Train Loss: 0.3984 | Train Acc: 0.8634 | Val Loss: 1.1061 | Val Acc: 0.6032
+Epoch 11/15 | Train Loss: 0.2866 | Train Acc: 0.9050 | Val Loss: 1.3359 | Val Acc: 0.5476
+Epoch 12/15 | Train Loss: 0.2167 | Train Acc: 0.9287 | Val Loss: 1.3310 | Val Acc: 0.6508
+-> [모델 저장] 검증 정확도 0.6508 달성, emergency/asdf7.pt에 저장.
+Epoch 13/15 | Train Loss: 0.1528 | Train Acc: 0.9515 | Val Loss: 1.8598 | Val Acc: 0.5397
+Epoch 14/15 | Train Loss: 0.1353 | Train Acc: 0.9634 | Val Loss: 1.4013 | Val Acc: 0.6111
+Epoch 15/15 | Train Loss: 0.1131 | Train Acc: 0.9683 | Val Loss: 2.0726 | Val Acc: 0.5635
+
+--- 학습 완료 ---
+✅ Loss PLOT 저장 완료.
+✅ ACC PLOT 저장 완료.
+
+[Start Final Test on Test Set]
+
+=== 최종 테스트 결과 ===
+Test Accuracy: 0.4803 (Total 127 Samples)

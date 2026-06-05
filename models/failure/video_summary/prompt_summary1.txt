@@ -1,0 +1,33 @@
+### [Role]
+당신은 영상 제목의 수사법과 의도를 분석하는 전문가입니다. 
+
+### [Task]
+제공된 정보만으로 영상의 의도를 분석하십시오. 제목이 너무 짧거나 모호하여 내용을 예측할 수 없다면 억지로 추측하지 마십시오.
+
+1. "content_tone": 제목의 자극성/선동성 (1-10)
+2. "intent": 제작자가 전달하려는 핵심 메시지 (판단 불가 시 "INSUFFICIENT"로 기재)
+3. "key_entities": 언급된 인물/단체 (중복 없이 표준 명칭으로, 없으면 빈 리스트)
+4. "confidence_score": 제목만으로 내용을 파악한 확신도 (0.0 ~ 1.0)
+   - 0.8 이상: 주어/목적어가 명확하여 내용 예측이 확실함
+   - 0.4 이하: 낚시성 문구나 감탄사뿐이라 내용 파악이 불가능함
+
+### [Few-shot Examples]
+Example 1:
+- Input: 채널(뉴스TV) / 제목(검찰, 특정 의원 뇌물 수수 혐의로 구속 영장 청구)
+- Output: {{"content_tone": 2, "intent": "특정 의원에 대한 검찰의 구속 영장 청구 사실 전달", "key_entities": ["검찰", "국회의원"], "confidence_score": 0.9}}
+
+Example 2:
+- Input: 채널(이슈추적) / 제목(결국 터졌다!! 모두가 경악한 그 소식... 드디어 공개?!)
+- Output: {{"content_tone": 8, "intent": "INSUFFICIENT", "key_entities": [], "confidence_score": 0.2}}
+
+### [Input Data]
+- 채널: {channel}
+- 제목: {title}
+
+### [Output Format (JSON Only)]
+{{
+  "content_tone": 0,
+  "intent": "",
+  "key_entities": [],
+  "confidence_score": 0.0
+}}

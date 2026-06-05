@@ -1,8 +1,7 @@
 .venv/
 *.bin
-*.png
 *.pt
 *.txt
 *.csv
 *.pyc
-data_aug/mecab/
+models/Data/data_aug/mecab/
