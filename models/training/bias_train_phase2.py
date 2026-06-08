@@ -59,22 +59,24 @@ def resume_training():
     label_column = 'label' 
     
     # 클래스별 데이터 개수 및 가중치 계산
+    # 기존 공식 대신 루트를 적용한 완화된 가중치 공식
     class_counts = train_df[label_column].value_counts().sort_index().values
-    total_samples = len(train_df)
-    class_weights = total_samples / (NUM_CLASSES * class_counts)
-    
-    # 디바이스로 이동시킬 텐서 생성
-    class_weights_tensor = torch.FloatTensor(class_weights).to(device)
+    # 수식: 1 / sqrt(클래스별 개수) -> 이후 정규화
+    smoothed_weights = 1.0 / np.sqrt(class_counts)
+    # 전체 합이 클래스 수(3)가 되도록 스케일링 (선택)
+    smoothed_weights = smoothed_weights / np.sum(smoothed_weights) * NUM_CLASSES
+
+    class_weights_tensor = torch.FloatTensor(smoothed_weights).to(device)
     
     print(f"Phase 2 클래스별 데이터 수: {class_counts}")
-    print(f"Phase 2 적용 가중치: {class_weights}")
+    print(f"Phase 2 적용 가중치: {smoothed_weights}")
     # ====================================================================================
 
     train_loader = DataLoader(YouTubeBiasDataset(train_df.to_dict('records')), batch_size=16, shuffle=True, collate_fn=collate_fn)
     val_loader = DataLoader(YouTubeBiasDataset(vali_df.to_dict('records')), batch_size=16, collate_fn=collate_fn)
     test_loader = DataLoader(YouTubeBiasDataset(test_df.to_dict('records')), batch_size=16, collate_fn=collate_fn)
 
-    optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=5e-6)
+    optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=2e-5)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=2)
     
     # ================= [변경 포인트 2] Loss 함수에 불균형 가중치 주입 =================
@@ -82,7 +84,7 @@ def resume_training():
     # ====================================================================================
 
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
-    best_acc = 0.7261
+    best_acc = 0.7174
     early_stop_count = 0
 
     # 3. 학습 루프
