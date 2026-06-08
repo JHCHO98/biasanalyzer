@@ -1,5 +1,0 @@
---- Phase 2 미세 조정 시작 (Device: cuda) ---
---- 분할된 Phase 2 데이터 로드 중 ---
-Epoch 001 | T-Loss: 0.6960 | V-Loss: 0.6525 | V-Acc: 0.8028
-⭐️ [갱신] 최고 정확도: 0.8028
-Epoch 002 | T-Loss: 0.6459 | V-Loss: 0.6419 | V-Acc: 0.8028

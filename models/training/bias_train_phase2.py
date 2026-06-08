@@ -4,11 +4,12 @@ import torch.optim as optim
 import pandas as pd
 import sys
 import os
+import numpy as np  # 클래스 가중치 계산을 위해 추가
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from biasanalyzer_model import BiasAnalyzer, YouTubeBiasDataset, collate_fn
 
-# [Logger 클래스 동일]
+# 로그 기록용 클래스
 class Logger(object):
     def __init__(self, path):
         self.terminal = sys.stdout
@@ -19,14 +20,14 @@ class Logger(object):
     def flush(self): pass
 
 # --- 설정 및 경로 ---
-TRIAL = ""
-LOG_PATH = f'models/result/biasanalyzer_log/log_phase2_{TRIAL}.txt'
-LOAD_PATH = f'models/result/biasanalyzer_model/bias{TRIAL}.pt'
-SAVE_PATH = f'models/result/biasanalyzer_model/bias{TRIAL}_final.pt'
-SUMMARY_PLOT_PATH = f'models/result/biasanalyzer_plots/summary_phase2_{TRIAL}.png'
+LOG_PATH = f'models/result/biasanalyzer_log/log_phase2_.txt'
+LOAD_PATH = f'models/training/bias.pt'
+SAVE_PATH = f'models/training/bias_final.pt'
+SUMMARY_PLOT_PATH = f'models/result/biasanalyzer_plots/summary_phase2_.png'
 
 sys.stdout = Logger(LOG_PATH)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+NUM_CLASSES = 3  # 클래스 수 명시 (가중치 계산용)
 
 def resume_training():
     print(f"--- Phase 2 미세 조정 시작 (Device: {device}) ---")
@@ -40,28 +41,48 @@ def resume_training():
     model.to(device)
 
     for param in model.parameters(): param.requires_grad = False
+    
     # 상위 레이어 및 분류기 해동
     for i in range(8, 12): 
         for param in model.bert.encoder.layer[i].parameters(): param.requires_grad = True
     for module in [model.title_to_comment_attn, model.comment_to_title_attn, model.classifier]:
         for param in module.parameters(): param.requires_grad = True
 
-    optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=5e-6)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=2)
-    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
-
     # 2. 이미 분할된 데이터 로드 (URL 기준 분할된 파일들)
     print("--- 분할된 Phase 2 데이터 로드 중 ---")
-    train_df = pd.read_csv("models/Data/data_processed/train2_merged.csv")
-    vali_df = pd.read_csv("models/Data/data_processed/vali2_merged.csv")
-    test_df = pd.read_csv("models/Data/data_processed/test2_merged.csv")
+    train_df = pd.read_csv("models/Data/data_processed/bias_train2_merged.csv")
+    vali_df = pd.read_csv("models/Data/data_processed/bias_vali2_merged.csv")
+    test_df = pd.read_csv("models/Data/data_processed/bias_test2_merged.csv")
+
+    # ================= [변경 포인트 1] Phase 2 학습 데이터 기반 가중치 계산 =================
+    # 데이터프레임의 정답 라벨 컬럼명에 맞게 'label' 부분을 수정하세요.
+    label_column = 'label' 
+    
+    # 클래스별 데이터 개수 및 가중치 계산
+    class_counts = train_df[label_column].value_counts().sort_index().values
+    total_samples = len(train_df)
+    class_weights = total_samples / (NUM_CLASSES * class_counts)
+    
+    # 디바이스로 이동시킬 텐서 생성
+    class_weights_tensor = torch.FloatTensor(class_weights).to(device)
+    
+    print(f"Phase 2 클래스별 데이터 수: {class_counts}")
+    print(f"Phase 2 적용 가중치: {class_weights}")
+    # ====================================================================================
 
     train_loader = DataLoader(YouTubeBiasDataset(train_df.to_dict('records')), batch_size=16, shuffle=True, collate_fn=collate_fn)
     val_loader = DataLoader(YouTubeBiasDataset(vali_df.to_dict('records')), batch_size=16, collate_fn=collate_fn)
     test_loader = DataLoader(YouTubeBiasDataset(test_df.to_dict('records')), batch_size=16, collate_fn=collate_fn)
 
+    optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=5e-6)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=2)
+    
+    # ================= [변경 포인트 2] Loss 함수에 불균형 가중치 주입 =================
+    criterion = nn.CrossEntropyLoss(weight=class_weights_tensor, label_smoothing=0.1)
+    # ====================================================================================
+
     history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
-    best_acc = 0.7174
+    best_acc = 0.7261
     early_stop_count = 0
 
     # 3. 학습 루프
