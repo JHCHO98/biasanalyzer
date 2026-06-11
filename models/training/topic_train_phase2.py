@@ -39,7 +39,7 @@ print(f"KoELECTRA 하위 {UNFREEZE_LAST_N_LAYERS}개 레이어 unfreezing")
 # --- 1. 데이터셋 준비 ---
 
 try:
-    data = pd.read_csv("crawling_data/data_processed.csv")
+    data = pd.read_csv("models/Data/data_processed/TopicDataset_processed.csv")
     data['text_input'] = data['title_clean'] + " [SEP] " + data['comment_clean'].fillna('')
     train_val_df, test_df = train_test_split(
         data, test_size=0.2, random_state=42, stratify=data['label_id']
