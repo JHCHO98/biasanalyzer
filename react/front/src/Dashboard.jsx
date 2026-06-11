@@ -489,27 +489,68 @@ const DemoView = ({ presentationMode }) => {
   const [comment, setComment] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
-  const handleAnalyze = (e) => {
+  const handleAnalyze = async (e) => {
     e.preventDefault();
     if (!title) return;
     setIsAnalyzing(true);
     setResult(null);
+    setIsDemoMode(false);
 
-    // 모의 분석 지연 (Simulated Inference Delay)
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost:5000/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, comment }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Server returned an error');
+      }
+
+      const data = await response.json();
       setIsAnalyzing(false);
-      const isConservative = Math.random() > 0.5;
+      
+      // Calculate dummy/simulated keywords for visualization
+      const isConservative = data.bias.score > 0;
       setResult({
-        score: (Math.random() * (isConservative ? 1 : -1)).toFixed(2),
-        label: isConservative ? '보수' : '진보',
+        isLive: true,
+        topic: data.topic.label,
+        topicConf: (data.topic.confidence * 100).toFixed(1),
+        score: data.bias.score.toFixed(2),
+        label: data.bias.label,
+        biasConf: (data.bias.confidence * 100).toFixed(1),
         keywords: [
           { text: title.split(' ')[0] || "유튜브", score: (Math.random() * 0.8 + 0.2).toFixed(1) * (isConservative ? 1 : -1) },
-          { text: "테스트", score: (Math.random() * 0.5).toFixed(1) },
+          { text: "실시간", score: (Math.random() * 0.5).toFixed(1) },
           { text: comment.split(' ')[0] || "댓글", score: (Math.random() * 0.8 + 0.2).toFixed(1) * (isConservative ? 1 : -1) }
         ]
       });
-    }, 1500);
+    } catch (err) {
+      console.warn("API Server not available, falling back to local simulation.", err);
+      // Fallback mode logic (Simulated Inference Delay)
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        setIsDemoMode(true);
+        const isConservative = Math.random() > 0.5;
+        setResult({
+          isLive: false,
+          topic: "정치",
+          topicConf: (Math.random() * 20 + 75).toFixed(1),
+          score: (Math.random() * (isConservative ? 1 : -1)).toFixed(2),
+          label: isConservative ? '보수' : '진보',
+          biasConf: (Math.random() * 20 + 75).toFixed(1),
+          keywords: [
+            { text: title.split(' ')[0] || "유튜브", score: (Math.random() * 0.8 + 0.2).toFixed(1) * (isConservative ? 1 : -1) },
+            { text: "데모 모드", score: (Math.random() * 0.5).toFixed(1) },
+            { text: comment.split(' ')[0] || "댓글", score: (Math.random() * 0.8 + 0.2).toFixed(1) * (isConservative ? 1 : -1) }
+          ]
+        });
+      }, 1500);
+    }
   };
 
   return (
@@ -521,7 +562,7 @@ const DemoView = ({ presentationMode }) => {
       className="flex flex-col gap-6 h-full pb-6"
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-        <Card title="모델 인터랙티브 테스트" subtitle="영상 제목과 댓글을 입력하여 모델의 편향성 판별 과정을 직접 시연해 보세요." className="h-full">
+        <Card title="모델 인터랙티브 테스트" subtitle="영상 제목과 댓글을 입력하여 모델의 편향성 및 카테고리 판별 과정을 직접 시연해 보세요." className="h-full">
           <form onSubmit={handleAnalyze} className="flex flex-col h-full mt-4 space-y-6">
             <div className="space-y-2">
               <label className="text-xs font-medium text-zinc-400">영상 제목</label>
@@ -558,37 +599,61 @@ const DemoView = ({ presentationMode }) => {
         </Card>
 
         <Card title="추론 결과" subtitle="실시간 산출물" className="h-full bg-[#0A0A0A]/50">
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center h-full">
             {!result && !isAnalyzing && (
-              <div className="text-zinc-600 text-sm flex flex-col items-center gap-3">
+              <div className="text-zinc-600 text-sm flex flex-col items-center gap-3 py-20">
                 <Activity size={24} className="opacity-50" />
                 입력을 대기 중입니다...
               </div>
             )}
 
             {isAnalyzing && (
-              <div className="text-indigo-400 text-sm flex flex-col items-center gap-4 animate-pulse">
+              <div className="text-indigo-400 text-sm flex flex-col items-center gap-4 animate-pulse py-20">
                 <div className="flex gap-1">
                   <div className="w-2 h-8 bg-indigo-500/40 rounded-full animate-[bounce_1s_infinite_0ms]"></div>
                   <div className="w-2 h-12 bg-indigo-500/60 rounded-full animate-[bounce_1s_infinite_100ms]"></div>
                   <div className="w-2 h-6 bg-indigo-500/40 rounded-full animate-[bounce_1s_infinite_200ms]"></div>
                   <div className="w-2 h-10 bg-indigo-500/80 rounded-full animate-[bounce_1s_infinite_300ms]"></div>
                 </div>
-                텐서 연산 중...
+                딥러닝 신경망 분석 중...
               </div>
             )}
 
             {result && !isAnalyzing && (
-              <div className="w-full h-full flex flex-col space-y-8 mt-4 animate-in fade-in zoom-in-95 duration-500">
-                <div className="flex flex-col items-center text-center space-y-2">
-                  <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">예측된 편향성</div>
-                  <div className={`text-5xl font-semibold tracking-tight ${result.score > 0 ? 'text-red-400' : 'text-blue-400'}`}>
+              <div className="w-full h-full flex flex-col space-y-6 mt-2 animate-in fade-in zoom-in-95 duration-500">
+                
+                {isDemoMode && (
+                  <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 text-xs text-amber-400">
+                    <AlertCircle size={14} />
+                    <span>로컬 API 서버 연결 실패 - 시뮬레이션 데모 모드로 동작 중</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Topic Box */}
+                  <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center space-y-1">
+                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">예측 카테고리 (Topic)</span>
+                    <span className="text-2xl font-bold text-indigo-400">{result.topic}</span>
+                    <span className="text-xs text-zinc-400">신뢰도: {result.topicConf}%</span>
+                  </div>
+
+                  {/* Bias Box */}
+                  <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center space-y-1">
+                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">정치 성향 (Bias)</span>
+                    <span className={`text-2xl font-bold ${result.label === '보수' ? 'text-red-400' : result.label === '진보' ? 'text-blue-400' : 'text-zinc-400'}`}>
+                      {result.label}
+                    </span>
+                    <span className="text-xs text-zinc-400">신뢰도: {result.biasConf}%</span>
+                  </div>
+                </div>
+
+                {/* Detailed Score Indicator */}
+                <div className="flex flex-col items-center text-center space-y-2 py-2 bg-zinc-900/40 border border-white/5 rounded-xl p-4">
+                  <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">편향성 지수 (Bias Score)</div>
+                  <div className={`text-4xl font-semibold tracking-tight ${result.score > 0 ? 'text-red-400' : result.score < 0 ? 'text-blue-400' : 'text-zinc-400'}`}>
                     {result.score > 0 ? '+' : ''}{result.score}
                   </div>
-                  <div className={`inline-flex px-3 py-1 rounded-full text-xs font-medium border ${result.score > 0 ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-blue-500/10 border-blue-500/20 text-blue-400'
-                    }`}>
-                    {result.label}
-                  </div>
+                  <div className="text-[10px] text-zinc-500">(-1.00: 진보 편향 ~ +1.00: 보수 편향)</div>
                 </div>
 
                 <div className="space-y-3">
