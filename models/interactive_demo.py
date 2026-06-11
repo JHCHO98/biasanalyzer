@@ -16,7 +16,25 @@ sys.modules['model'] = sys.modules[__name__]
 
 # Import the architectures
 from biasanalyzer_model import BiasAnalyzer
-from topic_train_phase2 import KCELectraClassifier
+
+# Define KCELectraClassifier directly to avoid running training scripts upon import
+class KCELectraClassifier(nn.Module):
+    def __init__(self, electra, num_classes):
+        super(KCELectraClassifier, self).__init__()
+        self.electra = electra
+        self.classifier = nn.Linear(768, num_classes)
+        nn.init.xavier_uniform_(self.classifier.weight) 
+
+    def forward(self, input_ids, attention_mask, token_type_ids):
+        outputs = self.electra(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids
+        )
+        cls_output = outputs[0][:, 0, :] 
+        logits = self.classifier(cls_output)
+        return logits
+
 
 # 2. CONSTANTS & MODEL PATHS
 MODEL_NAME = 'monologg/koelectra-base-v3-discriminator'

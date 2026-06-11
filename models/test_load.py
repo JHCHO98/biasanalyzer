@@ -6,9 +6,26 @@ import torch
 sys.path.append(os.path.join(os.path.dirname(__file__), 'training'))
 
 from biasanalyzer_model import BiasAnalyzer
-# We need to define or import KCELectraClassifier for torch.load to locate it
-# Let's import it from topic_train_phase2
-from topic_train_phase2 import KCELectraClassifier
+import torch.nn as nn
+
+# Define KCELectraClassifier directly to avoid running training scripts upon import
+class KCELectraClassifier(nn.Module):
+    def __init__(self, electra, num_classes):
+        super(KCELectraClassifier, self).__init__()
+        self.electra = electra
+        self.classifier = nn.Linear(768, num_classes)
+        nn.init.xavier_uniform_(self.classifier.weight) 
+
+    def forward(self, input_ids, attention_mask, token_type_ids):
+        outputs = self.electra(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids
+        )
+        cls_output = outputs[0][:, 0, :] 
+        logits = self.classifier(cls_output)
+        return logits
+
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using device: {DEVICE}")
