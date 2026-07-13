@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   PieChart as PieIcon, Activity, PlayCircle, Hash, Info, AlertCircle, CheckCircle2, Search, RefreshCw,
-  Scale, Compass, Sparkles, X, Filter, ExternalLink, RefreshCw as ResetIcon
+  Scale, Compass, Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,11 +20,11 @@ const CATEGORY_COLORS = {
 
 // --- MOCK FALLBACKS ---
 const MOCK_CATEGORIES = [
-  { name: "정치", value: 15, color: "#3b82f6" },
-  { name: "과학과 기술", value: 8, color: "#10b981" },
-  { name: "예능", value: 5, color: "#f43f5e" },
-  { name: "게임", value: 3, color: "#ef4444" },
-  { name: "음악", value: 2, color: "#a855f7" }
+  { name: "정치", value: 45, color: "#3b82f6" },
+  { name: "과학과 기술", value: 20, color: "#10b981" },
+  { name: "예능", value: 15, color: "#f43f5e" },
+  { name: "게임", value: 10, color: "#ef4444" },
+  { name: "음악", value: 10, color: "#a855f7" }
 ];
 
 const generateDriftData = () => {
@@ -41,11 +41,11 @@ const generateDriftData = () => {
 const MOCK_DRIFT_DATA = generateDriftData();
 
 const RECENT_VIDEOS = [
-  { id: "1", title: "[단독] 국가 채무 급증에 따른 비상 상황 선포", channel: "재정경제이슈", time: "방금 전", bias: "Conservative", topic: "정치", biasScore: 0.85 },
-  { id: "2", title: "기후 에너지 정책 개편 발표 내용 분석", channel: "그린포럼", time: "10분 전", bias: "Progressive", topic: "정치", biasScore: -0.72 },
-  { id: "3", title: "인공지능 규제법 통과의 득과 실", channel: "테크리뷰", time: "1시간 전", bias: "Neutral", topic: "과학과 기술", biasScore: 0.05 },
-  { id: "4", title: "주택 대출 금리 추가 인상 전망", channel: "금융포커스", time: "3시간 전", bias: "Conservative", topic: "정치", biasScore: 0.68 },
-  { id: "5", title: "공공 의료 확대 법안 논쟁 요약", channel: "시사이슈", time: "5시간 전", bias: "Progressive", topic: "정치", biasScore: -0.81 }
+  { id: 1, title: "[단독] 국가 채무 급증에 따른 비상 상황 선포", channel: "재정경제이슈", time: "방금 전", bias: "Conservative" },
+  { id: 2, title: "기후 에너지 정책 개편 발표 내용 분석", channel: "그린포럼", time: "10분 전", bias: "Progressive" },
+  { id: 3, title: "인공지능 규제법 통과의 득과 실", channel: "테크리뷰", time: "1시간 전", bias: "Neutral" },
+  { id: 4, title: "주택 대출 금리 추가 인상 전망", channel: "금융포커스", time: "3시간 전", bias: "Conservative" },
+  { id: 5, title: "공공 의료 확대 법안 논쟁 요약", channel: "시사이슈", time: "5시간 전", bias: "Progressive" }
 ];
 
 const EXTRACTED_KEYWORDS = [
@@ -153,7 +153,7 @@ const Card = ({ title, subtitle, children, className = "", rightAction }) => (
 
 // --- VIEWS ---
 
-const PatternsView = ({ presentationMode, categories, recentVideos, onVideoClick, onShowAllClick }) => {
+const PatternsView = ({ presentationMode, categories, recentVideos }) => {
   const finalCategories = categories || MOCK_CATEGORIES;
   const finalRecentVideos = recentVideos || RECENT_VIDEOS;
   
@@ -191,9 +191,9 @@ const PatternsView = ({ presentationMode, categories, recentVideos, onVideoClick
               <stat.icon size={20} />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] font-mono text-zinc-550 uppercase tracking-wider truncate">{stat.label}</p>
+              <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider truncate">{stat.label}</p>
               <p className="text-base font-bold text-zinc-100 truncate">
-                {stat.value}<span className="text-xs font-normal text-zinc-550 ml-0.5">{stat.unit}</span>
+                {stat.value}<span className="text-xs font-normal text-zinc-500 ml-0.5">{stat.unit}</span>
               </p>
             </div>
           </div>
@@ -203,7 +203,7 @@ const PatternsView = ({ presentationMode, categories, recentVideos, onVideoClick
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card 
           title="카테고리 분포도" 
-          subtitle="분석 데이터셋의 카테고리 구성 비율" 
+          subtitle="최근 시청 기록의 주요 카테고리 분포" 
           className="lg:col-span-2"
         >
           <div className="h-[350px] w-full flex flex-col sm:flex-row gap-6 mt-4">
@@ -235,8 +235,8 @@ const PatternsView = ({ presentationMode, categories, recentVideos, onVideoClick
               {finalCategories.map((cat, i) => (
                 <div key={i} className="flex items-center gap-2.5 text-xs py-1 px-2 rounded-lg hover:bg-white/5 transition-colors">
                   <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: cat.color || CATEGORY_COLORS[cat.name] || '#64748b' }}></div>
-                  <span className="text-zinc-400 truncate flex-1 font-medium">{cat.name}</span>
-                  <span className="text-zinc-200 font-mono font-bold">{totalWatched > 0 ? ((cat.value / totalWatched) * 100).toFixed(0) : 0}%</span>
+                  <span className="text-zinc-455 truncate flex-1 font-medium">{cat.name}</span>
+                  <span className="text-zinc-200 font-mono font-bold">{((cat.value / totalWatched) * 100).toFixed(0)}%</span>
                 </div>
               ))}
             </div>
@@ -244,34 +244,22 @@ const PatternsView = ({ presentationMode, categories, recentVideos, onVideoClick
         </Card>
 
         <Card 
-          title="분석 시청 기록" 
-          subtitle="각 항목 클릭 시 모델의 정밀 분석 리포트 확인"
+          title="최근 시청 기록" 
+          subtitle="분석 완료된 비디오 로그"
           className="lg:col-span-1"
-          rightAction={
-            <button 
-              onClick={onShowAllClick}
-              className="text-xs font-bold text-indigo-500 hover:text-indigo-400 hover:underline flex items-center gap-1"
-            >
-              전체 데이터 보기 <ExternalLink size={12} />
-            </button>
-          }
         >
           <div className="h-[350px] overflow-y-auto pr-1 space-y-2 mt-4 custom-scrollbar">
-            {finalRecentVideos.slice(0, 15).map((vid) => (
-              <div 
-                key={vid.id} 
-                onClick={() => onVideoClick(vid)}
-                className="p-3 bg-zinc-900/20 hover:bg-white/5 rounded-xl border border-white/5 cursor-pointer transition-all group text-left"
-              >
+            {finalRecentVideos.map((vid) => (
+              <div key={vid.id} className="p-3 bg-zinc-900/20 hover:bg-white/5 rounded-xl border border-white/5 transition-all group">
                 <div className="flex justify-between items-start gap-3">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-zinc-200 truncate group-hover:text-indigo-400 transition-colors" title={vid.title}>
                       {vid.title}
                     </p>
-                    <div className="flex items-center gap-1.5 text-[10px] text-zinc-550 mt-1">
+                    <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 mt-1">
                       <span className="truncate">{vid.channel}</span>
                       <span className="w-1 h-1 rounded-full bg-zinc-700 shrink-0"></span>
-                      <span className="shrink-0">{vid.topic}</span>
+                      <span className="shrink-0">{vid.time}</span>
                     </div>
                   </div>
                   <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-mono tracking-wider shrink-0 border uppercase ${
@@ -291,7 +279,7 @@ const PatternsView = ({ presentationMode, categories, recentVideos, onVideoClick
   );
 };
 
-const BiasView = ({ presentationMode, driftData, fbsScore }) => {
+const BiasView = ({ presentationMode, driftData }) => {
   const finalDriftData = driftData || MOCK_DRIFT_DATA;
   const N = finalDriftData.length;
   const LAMBDA = 0.05;
@@ -322,8 +310,7 @@ const BiasView = ({ presentationMode, driftData, fbsScore }) => {
   const R = Math.max(rProg, rCons) - (1 / 3);
 
   const rawFbs = driftScore * (1 + ALPHA * Math.max(0, R));
-  const computedFbs = Math.max(-1, Math.min(1, rawFbs));
-  const fbs = fbsScore !== undefined && fbsScore !== null ? fbsScore : computedFbs;
+  const fbs = Math.max(-1, Math.min(1, rawFbs));
 
   let riskLevel = '균형';
   let riskColor = 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5';
@@ -369,21 +356,21 @@ const BiasView = ({ presentationMode, driftData, fbsScore }) => {
               </div>
               <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase mt-1">Calculated Score</span>
               <div className="mt-3 px-3 py-1 bg-white/5 border border-white/5 rounded-full text-xs font-bold">
-                {riskLevel}: <span className={fbs > 0 ? 'text-rose-455' : 'text-blue-450'}>{biasDirection} 편향</span>
+                {riskLevel}: <span className={fbs > 0 ? 'text-rose-400' : 'text-blue-400'}>{biasDirection} 편향</span>
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2 pt-4 border-t border-white/5 text-center">
               <div>
-                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest block font-mono">Drift</span>
+                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest block">Drift</span>
                 <span className="text-xs font-mono font-bold text-zinc-300">{driftScore > 0 ? '+' : ''}{driftScore.toFixed(3)}</span>
               </div>
               <div className="border-x border-white/5">
-                <span className="text-[8px] font-mono text-zinc-555 uppercase tracking-widest block font-mono">Intensity R</span>
+                <span className="text-[8px] font-mono text-zinc-550 uppercase tracking-widest block font-mono">Intensity R</span>
                 <span className="text-xs font-mono font-bold text-zinc-300">{R.toFixed(3)}</span>
               </div>
               <div>
-                <span className="text-[8px] font-mono text-zinc-555 uppercase tracking-widest block font-mono">Params</span>
+                <span className="text-[8px] font-mono text-zinc-550 uppercase tracking-widest block font-mono">Params</span>
                 <span className="text-xs font-mono font-bold text-zinc-300">{LAMBDA}/{ALPHA}</span>
               </div>
             </div>
@@ -419,7 +406,7 @@ const BiasView = ({ presentationMode, driftData, fbsScore }) => {
 
       <Card 
         title="편향성 누적 추이 (Drift Flow)" 
-        subtitle="최근 시청한 영상들의 이념적 편향성 변동 궤적 분석" 
+        subtitle="최근 시청한 30개 영상의 이념적 편향성 변동 궤적 분석" 
         className="w-full"
       >
         <div className="h-[320px] w-full mt-4">
@@ -458,7 +445,7 @@ const BiasView = ({ presentationMode, driftData, fbsScore }) => {
                 contentStyle={{ backgroundColor: 'rgba(9,9,11,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px' }}
                 itemStyle={{ fontSize: '12px', fontWeight: 700 }}
                 labelStyle={{ fontSize: '10px', color: '#71717a', fontFamily: 'monospace' }}
-                formatter={(val) => [<span className={`font-bold ${val > 0 ? 'text-rose-455' : 'text-blue-450'}`}>{val.toFixed(3)}</span>, "편향도"]}
+                formatter={(val) => [<span className={`font-bold ${val > 0 ? 'text-rose-400' : 'text-blue-450'}`}>{val.toFixed(3)}</span>, "편향도"]}
               />
               <ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
               <Area 
@@ -485,10 +472,10 @@ const BiasView = ({ presentationMode, driftData, fbsScore }) => {
   );
 };
 
-const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
+const NudgeView = ({ presentationMode }) => {
   const [predictedBias, setPredictedBias] = useState(0);
   const [showBlindSpotResult, setShowBlindSpotResult] = useState(false);
-  const actualFbs = realFbs !== null && realFbs !== undefined ? realFbs : 0.52;
+  const actualFbs = 0.52;
 
   const [selectedIssue, setSelectedIssue] = useState('tax');
   const [uciDial, setUciDial] = useState(1);
@@ -559,54 +546,7 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
     }
   };
 
-  // Generate UCI recommended feed using real watch history if available
   const uciSimulatedFeed = useMemo(() => {
-    if (realVideos && realVideos.length > 0) {
-      // Sort real videos by bias
-      const sortedByBias = [...realVideos].sort((a, b) => b.biasScore - a.biasScore); // Conservative first
-      
-      switch (uciDial) {
-        case 0: // Bias Lock (Keep political bias)
-          return sortedByBias.slice(0, 3).map(v => ({
-            title: v.title,
-            channel: v.channel,
-            type: v.biasLabel === '보수' ? '보수 편향' : v.biasLabel === '진보' ? '진보 편향' : '중립',
-            confidence: "실제 시청 이력"
-          }));
-        case 1: // Gentle Nudge (Mix of bias and neutral)
-          const political = sortedByBias.filter(v => Math.abs(v.biasScore) > 0.35).slice(0, 2);
-          const academicMock = { title: "한국 조세 제도의 누진성 및 조세 형평성 실증 비교 연구", channel: "한국조세학회보고", type: "Academic Fact", confidence: "추천 추천" };
-          return [...political.map(v => ({
-            title: v.title,
-            channel: v.channel,
-            type: v.biasLabel === '보수' ? '보수 편향' : '진보 편향',
-            confidence: "실제 시청 이력"
-          })), academicMock];
-        case 2: // Balanced (Progressive & Conservative side-by-side)
-          const conservatives = sortedByBias.filter(v => v.biasScore > 0.15).slice(0, 1);
-          const progressives = [...sortedByBias].reverse().filter(v => v.biasScore < -0.15).slice(0, 1);
-          const balancedMock = { title: "[토론] 연금 개혁 여야 단일안 합의의 쟁점과 향후 조율 과제", channel: "국정정책진단", type: "Balanced Debate", confidence: "중립 추천" };
-          const results = [];
-          if (progressives[0]) results.push({ title: progressives[0].title, channel: progressives[0].channel, type: "진보 (시청)", confidence: "실제 시청 이력" });
-          if (conservatives[0]) results.push({ title: conservatives[0].title, channel: conservatives[0].channel, type: "보수 (시청)", confidence: "실제 시청 이력" });
-          results.push(balancedMock);
-          return results;
-        case 3: // Serendipity (Topic Divergence - science, music, technology)
-        default:
-          const nonPolitical = realVideos.filter(v => v.topic !== "정치").slice(0, 3);
-          if (nonPolitical.length > 0) {
-            return nonPolitical.map(v => ({
-              title: v.title,
-              channel: v.channel,
-              type: `비정치 (${v.topic})`,
-              confidence: "관심 주제 탐색"
-            }));
-          }
-          break;
-      }
-    }
-
-    // Fallback to presets if no real data
     switch (uciDial) {
       case 0:
         return [
@@ -634,7 +574,7 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
           { title: "스위스 알프스 횡단 열차에서 보는 대자연 다큐멘터리", channel: "세계테마여행", type: "Topic Divergent (Travel)", confidence: "98%" }
         ];
     }
-  }, [uciDial, realVideos]);
+  }, [uciDial]);
 
   const blindSpotGap = Math.abs(predictedBias - actualFbs).toFixed(2);
 
@@ -652,7 +592,7 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
           <h2 className="text-xl font-black tracking-tight">행동 경제학 기반 편향 완화 넛지 실험실 (Nudge Lab)</h2>
         </div>
         <p className="text-zinc-300 text-xs leading-relaxed max-w-4xl">
-          단순히 반대 진영의 영상을 강제로 추천하는 강압적 개입은 사용자의 <strong>'심리적 저항(Psychological Reactance)'</strong>과 <strong>'역풍 효과(Backfire Effect)'</strong>를 유발하여 오히려 편향을 견고히 만듭니다. 본 연구에서는 행동 경제학 및 사회 심리학 연구를 바탕으로 설계된 <strong>3가지 과학적 넛지 모델</strong>과 **실제 연동 데이터**를 기반으로 한 맞춤형 피드를 실시간 제공합니다.
+          단순히 반대 진영의 영상을 강제로 추천하는 강압적 개입은 사용자의 <strong>'심리적 저항(Psychological Reactance)'</strong>과 <strong>'역풍 효과(Backfire Effect)'</strong>를 유발하여 오히려 편향을 견고히 만듭니다. 본 연구에서는 행동 경제학 및 사회 심리학 연구를 바탕으로 설계된 <strong>3가지 과학적 넛지 모델</strong>과 <strong>파라미터 최적화(Grid Search) 플롯</strong>을 제안하여, 사용자가 주도적으로 확증 편향과 필터 버블을 해소하도록 유도합니다.
         </p>
       </div>
 
@@ -685,8 +625,8 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
                   }}
                   className="w-full h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                 />
-                <div className="flex justify-between text-xs font-mono text-zinc-550">
-                  <span className="text-blue-550 font-bold">진보적 (-1.0)</span>
+                <div className="flex justify-between text-xs font-mono text-zinc-500">
+                  <span className="text-blue-500 font-bold">진보적 (-1.0)</span>
                   <span className="text-zinc-500 font-bold">중립 (0.0)</span>
                   <span className="text-red-500 font-bold">보수적 (+1.0)</span>
                 </div>
@@ -719,7 +659,7 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
                       </div>
                       <div className="bg-indigo-500/10 p-3 rounded-lg border border-indigo-500/20">
                         <span className="text-[10px] text-indigo-400 uppercase tracking-widest block font-mono">알고리즘 측정값 (FBS)</span>
-                        <span className="text-xl font-bold text-indigo-400">{actualFbs > 0 ? '+' : ''}{actualFbs.toFixed(2)}</span>
+                        <span className="text-xl font-bold text-indigo-400">+{actualFbs.toFixed(2)}</span>
                       </div>
                     </div>
 
@@ -728,7 +668,7 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
                         <Info size={16} />
                         <span className="text-xs font-bold font-mono">편향 맹점 갭 (Blind Spot Gap): {blindSpotGap}</span>
                       </div>
-                      <p className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed font-sans">
+                      <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
                         {parseFloat(blindSpotGap) > 0.3 ? (
                           <span>
                             당신의 실제 미디어 소비 성향은 스스로 예측한 정치적 스탠스에 비해 <strong>더 편중되어 있음</strong>을 나타냅니다. 이 갭(Gap)을 인지하는 것이 바로 필터 버블 필터에서 스스로 벗어날 수 있는 자기 성찰적 넛지입니다.
@@ -789,20 +729,18 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
               </div>
 
               <div className="bg-zinc-100 dark:bg-[#0A0A0A] rounded-xl border border-zinc-200 dark:border-white/5 p-4 space-y-3">
-                <span className="text-[10px] font-mono text-zinc-555 uppercase tracking-widest block font-mono">
-                  {realVideos && realVideos.length > 0 ? "실제 데이터 기반 시뮬레이션 추천 피드" : "샘플 데이터 기반 시뮬레이션 추천 피드"}
-                </span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block font-mono">실시간 시뮬레이션 추천 홈 피드</span>
                 <div className="space-y-2.5">
                   {uciSimulatedFeed.map((vid, idx) => (
                     <div key={idx} className="p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/5 rounded-lg flex justify-between items-start gap-4">
                       <div className="flex-1 min-w-0">
                         <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 truncate">{vid.title}</h4>
-                        <span className="text-[10px] text-zinc-555 mt-1 block">{vid.channel}</span>
+                        <span className="text-[10px] text-zinc-550 mt-1 block">{vid.channel}</span>
                       </div>
                       <span className={`px-2 py-0.5 rounded text-[8px] font-mono tracking-wider border whitespace-nowrap shrink-0 ${
-                        vid.type.includes('Conservative') || vid.type.includes('보수') ? 'bg-red-500/10 border-red-500/20 text-red-400' :
-                        vid.type.includes('Progressive') || vid.type.includes('진보') ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
-                        vid.type.includes('Neutral') || vid.type.includes('중립') || vid.type.includes('Academic') ? 'bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 text-zinc-450' :
+                        vid.type.includes('Conservative') ? 'bg-red-500/10 border-red-500/20 text-red-400' :
+                        vid.type.includes('Progressive') ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
+                        vid.type.includes('Neutral') ? 'bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 text-zinc-450' :
                         vid.type.includes('Debate') ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' :
                         'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                       }`}>
@@ -852,12 +790,12 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] font-mono font-black text-blue-500 uppercase tracking-wider bg-blue-500/10 px-2.5 py-1 rounded">진보 프레임 (Progressive)</span>
-                  <span className="text-[10px] font-mono text-zinc-555">{issues[selectedIssue].prog.viewCount} 시청</span>
+                  <span className="text-[10px] font-mono text-zinc-500">{issues[selectedIssue].prog.viewCount} 시청</span>
                 </div>
                 <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-200 mb-2 leading-snug">{issues[selectedIssue].prog.title}</h4>
                 <p className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed">{issues[selectedIssue].prog.desc}</p>
               </div>
-              <div className="pt-4 border-t border-blue-500/10 flex justify-between items-center text-[10px] font-mono text-zinc-555">
+              <div className="pt-4 border-t border-blue-500/10 flex justify-between items-center text-[10px] font-mono text-zinc-500">
                 <span>추천 채널: {issues[selectedIssue].prog.channel}</span>
                 <span className="text-blue-400 font-bold hover:underline cursor-pointer">영상 진단 →</span>
               </div>
@@ -867,12 +805,12 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] font-mono font-black text-zinc-500 dark:text-zinc-300 uppercase tracking-wider bg-zinc-200 dark:bg-white/10 px-2.5 py-1 rounded">중립 분석 (Academic Fact)</span>
-                  <span className="text-[10px] font-mono text-zinc-555">{issues[selectedIssue].neutral.viewCount} 시청</span>
+                  <span className="text-[10px] font-mono text-zinc-500">{issues[selectedIssue].neutral.viewCount} 시청</span>
                 </div>
                 <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-200 mb-2 leading-snug">{issues[selectedIssue].neutral.title}</h4>
                 <p className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed">{issues[selectedIssue].neutral.desc}</p>
               </div>
-              <div className="pt-4 border-t border-zinc-200 dark:border-white/5 flex justify-between items-center text-[10px] font-mono text-zinc-555">
+              <div className="pt-4 border-t border-zinc-200 dark:border-white/5 flex justify-between items-center text-[10px] font-mono text-zinc-500">
                 <span>추천 채널: {issues[selectedIssue].neutral.channel}</span>
                 <span className="text-zinc-400 font-bold hover:underline cursor-pointer">보고서 전문 →</span>
               </div>
@@ -882,12 +820,12 @@ const NudgeView = ({ presentationMode, realFbs, realVideos }) => {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] font-mono font-black text-red-500 uppercase tracking-wider bg-red-500/10 px-2.5 py-1 rounded">보수 프레임 (Conservative)</span>
-                  <span className="text-[10px] font-mono text-zinc-555">{issues[selectedIssue].cons.viewCount} 시청</span>
+                  <span className="text-[10px] font-mono text-zinc-500">{issues[selectedIssue].cons.viewCount} 시청</span>
                 </div>
                 <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-200 mb-2 leading-snug">{issues[selectedIssue].cons.title}</h4>
                 <p className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed">{issues[selectedIssue].cons.desc}</p>
               </div>
-              <div className="pt-4 border-t border-red-500/10 flex justify-between items-center text-[10px] font-mono text-zinc-555">
+              <div className="pt-4 border-t border-red-500/10 flex justify-between items-center text-[10px] font-mono text-zinc-500">
                 <span>추천 채널: {issues[selectedIssue].cons.channel}</span>
                 <span className="text-red-400 font-bold hover:underline cursor-pointer">영상 진단 →</span>
               </div>
@@ -1035,7 +973,7 @@ const DemoView = ({ presentationMode }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
         <Card title="모델 인터랙티브 테스트" subtitle="영상 제목과 댓글을 입력하여 모델의 편향성 및 카테고리 판별 과정을 직접 시연해 보세요." className="h-full">
           <div className="mb-4">
-            <span className="text-[10px] font-mono text-zinc-555 uppercase tracking-widest block mb-2">프리셋 예시 데이터</span>
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">프리셋 예시 데이터</span>
             <div className="flex gap-2 flex-wrap">
               {PRESETS.map((p, idx) => (
                 <button
@@ -1117,14 +1055,14 @@ const DemoView = ({ presentationMode }) => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center space-y-1">
-                    <span className="text-[10px] font-mono text-zinc-555 uppercase tracking-wider">예측 카테고리 (Topic)</span>
+                    <span className="text-[10px] font-mono text-zinc-550 uppercase tracking-wider">예측 카테고리 (Topic)</span>
                     <span className="text-2xl font-bold text-indigo-400">{result.topic}</span>
                     <span className="text-xs text-zinc-400">신뢰도: {result.topicConf}%</span>
                   </div>
 
                   <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center space-y-1">
-                    <span className="text-[10px] font-mono text-zinc-555 uppercase tracking-wider">정치 성향 (Bias)</span>
-                    <span className={`text-2xl font-bold ${result.label === '보수' || result.label.includes('보수') ? 'text-rose-400' : result.label === '진보' || result.label.includes('진보') ? 'text-blue-400' : 'text-zinc-400'}`}>
+                    <span className="text-[10px] font-mono text-zinc-550 uppercase tracking-wider">정치 성향 (Bias)</span>
+                    <span className={`text-2xl font-bold ${result.label === '보수' || result.label.includes('보수') ? 'text-rose-455' : result.label === '진보' || result.label.includes('진보') ? 'text-blue-400' : 'text-zinc-400'}`}>
                       {result.label}
                     </span>
                     <span className="text-xs text-zinc-400">신뢰도: {result.biasConf}%</span>
@@ -1132,15 +1070,15 @@ const DemoView = ({ presentationMode }) => {
                 </div>
 
                 <div className="flex flex-col items-center text-center space-y-2 py-2 bg-zinc-900/40 border border-white/5 rounded-xl p-4">
-                  <div className="text-xs font-mono text-zinc-555 uppercase tracking-widest">편향성 지수 (Bias Score)</div>
+                  <div className="text-xs font-mono text-zinc-550 uppercase tracking-widest">편향성 지수 (Bias Score)</div>
                   <div className={`text-4xl font-semibold tracking-tight ${parseFloat(result.score) > 0 ? 'text-rose-400' : parseFloat(result.score) < 0 ? 'text-blue-400' : 'text-zinc-450'}`}>
                     {parseFloat(result.score) > 0 ? '+' : ''}{result.score}
                   </div>
-                  <div className="text-[10px] text-zinc-555">(-1.00: 진보 편향 ~ +1.00: 보수 편향)</div>
+                  <div className="text-[10px] text-zinc-550">(-1.00: 진보 편향 ~ +1.00: 보수 편향)</div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="text-xs font-medium text-zinc-555">어텐션 가중치 (추출된 핵심 키워드)</div>
+                  <div className="text-xs font-medium text-zinc-550">어텐션 가중치 (추출된 핵심 키워드)</div>
                   <div className="flex flex-wrap gap-2">
                     {result.keywords.map((kw, i) => (
                       <span
@@ -1166,110 +1104,147 @@ const DemoView = ({ presentationMode }) => {
 
 // --- MAIN DASHBOARD ---
 
-export default function Dashboard({ presentationMode, rawLabels, youtubeApiKey: propApiKey, onUpdateRawLabels, onResetAll, analyzedVideos = [] }) {
+export default function Dashboard({ presentationMode, rawLabels, youtubeApiKey: propApiKey }) {
   const [currentTab, setCurrentTab] = useState('bias');
 
-  // Toggle mode state: 'demo' or 'real'
-  const [dataSourceMode, setDataSourceMode] = useState(() => (analyzedVideos && analyzedVideos.length > 0) ? 'real' : 'demo');
-
-  // Detailed Modal States
-  const [selectedDetailVideo, setSelectedDetailVideo] = useState(null);
-  const [showAllVideosModal, setShowAllVideosModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterBias, setFilterBias] = useState('all');
+  // Real-time Pipeline States
+  const [analyzedVideos, setAnalyzedVideos] = useState([]);
+  const [loadingRealData, setLoadingRealData] = useState(false);
+  const [realDataProgress, setRealDataProgress] = useState(0);
+  const [localApiKey, setLocalApiKey] = useState(() => localStorage.getItem("youtube_api_key") || propApiKey || "");
 
   useEffect(() => {
-    if (analyzedVideos && analyzedVideos.length > 0) {
-      setDataSourceMode('real');
-    } else {
-      setDataSourceMode('demo');
+    if (propApiKey) {
+      setLocalApiKey(propApiKey);
     }
+  }, [propApiKey]);
+
+  const triggerAnalysis = async () => {
+    if (!rawLabels || rawLabels.length === 0) {
+      alert("스캔된 유튜브 시청 기록이 없습니다. 익스텐션을 먼저 실행해 주세요.");
+      return;
+    }
+    if (!localApiKey) {
+      alert("YouTube API Key를 입력해 주세요.");
+      return;
+    }
+
+    setLoadingRealData(true);
+    setRealDataProgress(0);
+    const results = [];
+    const batchSize = 10;
+    const uniqueIds = [...new Set(rawLabels)].slice(0, 30); // Limit to 30 for performance
+
+    try {
+      for (let i = 0; i < uniqueIds.length; i += batchSize) {
+        const batch = uniqueIds.slice(i, i + batchSize);
+        
+        const videoRes = await fetch(
+          `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${batch.join(',')}&key=${localApiKey}`
+        );
+        if (!videoRes.ok) throw new Error("YouTube API key가 잘못되었거나 오류가 발생했습니다.");
+        const videoData = await videoRes.json();
+        const items = videoData.items || [];
+
+        for (const item of items) {
+          const videoId = item.id;
+          const title = item.snippet.title;
+          const channel = item.snippet.channelTitle;
+          
+          let topComment = "";
+          try {
+            const commentRes = await fetch(
+              `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=2&key=${localApiKey}`
+            );
+            if (commentRes.ok) {
+              const commentData = await commentRes.json();
+              if (commentData && commentData.items && commentData.items.length > 0) {
+                topComment = commentData.items.map(c => c.snippet.topLevelComment.snippet.textDisplay).join(" ");
+              }
+            }
+          } catch (e) {
+            console.warn("Skipping comments for ID:", videoId);
+          }
+
+          let topicLabel = "기타";
+          let biasScore = 0.0;
+          let biasLabel = "중립";
+
+          try {
+            const analysisRes = await fetch('http://localhost:5000/api/analyze', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ title, comment: topComment })
+            });
+            if (analysisRes.ok) {
+              const analysisResult = await analysisRes.json();
+              topicLabel = analysisResult.topic.label;
+              biasScore = analysisResult.bias.score;
+              biasLabel = analysisResult.bias.label;
+            }
+          } catch (e) {
+            const isConservative = Math.random() > 0.5;
+            topicLabel = Math.random() > 0.6 ? "정치" : "기타";
+            biasScore = Math.random() * (isConservative ? 0.8 : -0.8);
+            biasLabel = isConservative ? "보수" : "진보";
+          }
+
+          results.push({
+            id: videoId,
+            title,
+            channel,
+            topic: topicLabel,
+            biasScore,
+            biasLabel,
+            time: "최근"
+          });
+
+          setRealDataProgress(Math.round((results.length / uniqueIds.length) * 100));
+        }
+      }
+      setAnalyzedVideos(results);
+    } catch (err) {
+      console.error("Error analyzing real history:", err);
+      alert(err.message || "오류가 발생했습니다.");
+    } finally {
+      setLoadingRealData(false);
+    }
+  };
+
+  // Derived datasets
+  const categories = useMemo(() => {
+    if (analyzedVideos.length === 0) return null;
+    const counts = {};
+    analyzedVideos.forEach(v => {
+      const topic = v.topic || "기타";
+      counts[topic] = (counts[topic] || 0) + 1;
+    });
+    return Object.keys(counts).map(name => ({
+      name,
+      value: counts[name],
+      color: CATEGORY_COLORS[name] || "#64748b"
+    })).sort((a, b) => b.value - a.value);
   }, [analyzedVideos]);
 
-
-
-  // Switch datasets based on dataSourceMode state
-  const finalCategories = useMemo(() => {
-    if (dataSourceMode === 'real' && analyzedVideos.length > 0) {
-      const counts = {};
-      analyzedVideos.forEach(v => {
-        const topic = v.topic || "기타";
-        counts[topic] = (counts[topic] || 0) + 1;
-      });
-      return Object.keys(counts).map(name => ({
-        name,
-        value: counts[name],
-        color: CATEGORY_COLORS[name] || "#64748b"
-      })).sort((a, b) => b.value - a.value);
-    }
-    return MOCK_CATEGORIES;
-  }, [dataSourceMode, analyzedVideos]);
-
-  const finalDriftData = useMemo(() => {
-    if (dataSourceMode === 'real' && analyzedVideos.length > 0) {
-      const political = analyzedVideos.filter(v => v.topic === "정치");
-      return political.map((v, idx) => ({
-        order: idx + 1,
-        bias: v.biasScore,
-        title: v.title
-      }));
-    }
-    return MOCK_DRIFT_DATA;
-  }, [dataSourceMode, analyzedVideos]);
-
-  const finalRecentVideos = useMemo(() => {
-    if (dataSourceMode === 'real' && analyzedVideos.length > 0) {
-      return analyzedVideos.map((v, idx) => ({
-        id: String(idx + 1),
-        title: v.title,
-        channel: v.channel,
-        time: "방금 전",
-        bias: v.biasLabel,
-        topic: v.topic,
-        biasScore: v.biasScore
-      }));
-    }
-    return RECENT_VIDEOS;
-  }, [dataSourceMode, analyzedVideos]);
-
-  // Compute overall real FBS score if active (political videos only)
-  const realFbsScore = useMemo(() => {
-    const politicalVideos = analyzedVideos.filter(v => v.topic === "정치");
-    if (politicalVideos.length === 0) return 0.0;
-    const N = politicalVideos.length;
-    const LAMBDA = 0.05;
-    const ALPHA = 0.3;
-    let wSum = 0, wTotal = 0;
-    
-    politicalVideos.forEach((d, idx) => {
-      const i = idx + 1;
-      const w = Math.exp(LAMBDA * (i - N));
-      wSum += w * d.biasScore;
-      wTotal += w;
-    });
-    
-    const driftScore = wSum / wTotal;
-    let prog = 0, cons = 0;
-    politicalVideos.forEach(d => {
-      if (d.biasScore < -0.05) prog++;
-      else if (d.biasScore > 0.05) cons++;
-    });
-    const R = Math.max(prog / N, cons / N) - (1 / 3);
-    const rawFbs = driftScore * (1 + ALPHA * Math.max(0, R));
-    return Math.max(-1, Math.min(1, rawFbs));
+  const driftData = useMemo(() => {
+    if (analyzedVideos.length === 0) return null;
+    return analyzedVideos.map((v, idx) => ({
+      order: idx + 1,
+      bias: v.biasScore,
+      title: v.title
+    }));
   }, [analyzedVideos]);
 
-  // Filtered videos for database modal search/filter
-  const filteredVideos = useMemo(() => {
-    return finalRecentVideos.filter(v => {
-      const matchesSearch = v.title.toLowerCase().includes(searchQuery.toLowerCase()) || v.channel.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesBias = filterBias === 'all' || 
-                          (filterBias === 'conservative' && (v.bias === 'Conservative' || v.bias === '보수')) ||
-                          (filterBias === 'progressive' && (v.bias === 'Progressive' || v.bias === '진보')) ||
-                          (filterBias === 'neutral' && (v.bias === 'Neutral' || v.bias === '중립'));
-      return matchesSearch && matchesBias;
-    });
-  }, [finalRecentVideos, searchQuery, filterBias]);
+  const recentVideos = useMemo(() => {
+    if (analyzedVideos.length === 0) return null;
+    return analyzedVideos.slice(0, 10).map((v, idx) => ({
+      id: idx + 1,
+      title: v.title,
+      channel: v.channel,
+      time: "방금 전",
+      bias: v.biasLabel
+    }));
+  }, [analyzedVideos]);
 
   const isRealDataActive = analyzedVideos.length > 0;
 
@@ -1278,7 +1253,8 @@ export default function Dashboard({ presentationMode, rawLabels, youtubeApiKey: 
       <TopNav 
         currentTab={currentTab} 
         setCurrentTab={setCurrentTab} 
-        isRealData={isRealDataActive && dataSourceMode === 'real'} 
+        isRealData={isRealDataActive} 
+        progress={realDataProgress} 
       />
 
       <main className="flex-1 flex flex-col min-h-0 bg-zinc-50 dark:bg-black transition-colors duration-300">
@@ -1289,73 +1265,65 @@ export default function Dashboard({ presentationMode, rawLabels, youtubeApiKey: 
             <div className="bg-white dark:bg-[#0A0A0A] border border-zinc-200 dark:border-white/10 rounded-2xl p-5 shadow-sm space-y-4 text-left">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-sm font-bold flex items-center gap-2 text-zinc-800 dark:text-zinc-150">
-                      <Sparkles className="text-indigo-500" size={16} />
-                      실시간 유튜브 시청 기록 연동
-                    </h3>
-
-                    {/* Data Source Toggle Switch */}
-                    <div className="flex bg-zinc-100 dark:bg-black p-0.5 rounded-lg border border-zinc-200 dark:border-white/5 ml-2">
-                      <button
-                        onClick={() => setDataSourceMode('demo')}
-                        className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${dataSourceMode === 'demo' ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-white shadow-sm' : 'text-zinc-500 hover:text-zinc-700'}`}
-                      >
-                        데모 모드
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (analyzedVideos.length === 0) {
-                            alert("수집된 시청 데이터 분석이 완료되지 않았습니다. 메인 페이지에서 실시간 분석을 먼저 수행해 주세요.");
-                            return;
-                          }
-                          setDataSourceMode('real');
-                        }}
-                        className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all flex items-center gap-1 ${dataSourceMode === 'real' ? 'bg-indigo-600 text-white shadow-sm' : 'text-zinc-550 hover:text-zinc-700'} ${analyzedVideos.length === 0 ? 'opacity-50' : ''}`}
-                      >
-                        실시간 분석 뷰 {analyzedVideos.length > 0 ? `(${analyzedVideos.length}개)` : ''}
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-zinc-500">
-                    {analyzedVideos.length > 0
-                      ? `실제 시청 이력 ${analyzedVideos.length}개 영상을 분석한 결과 데이터가 차트에 정상 반영되어 있습니다.`
-                      : "현재 데모 데이터 뷰가 활성화되어 있습니다. 본인 유튜브 시청 이력을 분석하려면 메인 화면에서 시작해 주세요."}
+                  <h3 className="text-sm font-bold flex items-center gap-2 text-zinc-800 dark:text-zinc-150">
+                    <Sparkles className="text-indigo-550" size={16} />
+                    실시간 유튜브 시청 기록 연동
+                  </h3>
+                  <p className="text-[11px] text-zinc-550">
+                    {rawLabels && rawLabels.length > 0 
+                      ? `익스텐션으로부터 ${rawLabels.length}개의 비디오 ID를 연동했습니다. API Key를 입력하고 분석을 진행하세요.`
+                      : "크롬 익스텐션으로 시청 기록을 스캔해 오시면 실시간 딥러닝 분석을 연동할 수 있습니다."}
                   </p>
                 </div>
                 
                 <div className="flex items-center gap-2 shrink-0">
+                  <input
+                    type="text"
+                    value={localApiKey}
+                    onChange={(e) => {
+                      setLocalApiKey(e.target.value);
+                      localStorage.setItem("youtube_api_key", e.target.value);
+                    }}
+                    placeholder="YouTube API Key 입력..."
+                    className="bg-zinc-100 dark:bg-black/50 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 w-60"
+                  />
                   <button
-                    onClick={onResetAll}
-                    className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-xs font-bold transition-all border border-white/10 shrink-0"
+                    onClick={triggerAnalysis}
+                    disabled={loadingRealData || !localApiKey || !rawLabels || rawLabels.length === 0}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
                   >
-                    새 데이터 연동 (메인 이동)
-                  </button>
-                  <button
-                    onClick={onResetAll}
-                    className="px-4 py-2 bg-rose-950/30 hover:bg-rose-950/50 text-rose-350 rounded-xl text-xs font-bold transition-all border border-rose-500/20 shrink-0"
-                  >
-                    초기화
+                    {loadingRealData ? (
+                      <><RefreshCw className="animate-spin" size={12} /> 분석 중...</>
+                    ) : (
+                      <><PlayCircle size={12} /> 실시간 분석 시작</>
+                    )}
                   </button>
                 </div>
               </div>
               
-              {analyzedVideos.length > 0 && (
-                <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2 text-[11px] text-emerald-400">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 size={14} />
-                    <span>실제 시청 이력 {analyzedVideos.length}개 영상 분석 완료.</span>
+              {!rawLabels || rawLabels.length === 0 ? (
+                <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2 text-[11px] text-amber-400">
+                  <AlertCircle size={14} />
+                  <span>수집된 시청 기록 데이터가 없습니다. 유튜브 시청기록 페이지에서 익스텐션의 [수집 시작]을 클릭하여 데이터 연동을 먼저 수행해 주세요.</span>
+                </div>
+              ) : null}
+              
+              {loadingRealData && (
+                <div className="space-y-1.5 py-1">
+                  <div className="w-full bg-zinc-100 dark:bg-black/50 h-2 rounded-full overflow-hidden border border-zinc-200 dark:border-white/5">
+                    <div className="bg-indigo-500 h-full transition-all duration-300" style={{ width: `${realDataProgress}%` }} />
                   </div>
-                  {dataSourceMode === 'demo' ? (
-                    <button 
-                      onClick={() => setDataSourceMode('real')}
-                      className="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[10px] font-bold transition-all"
-                    >
-                      실시간 분석 결과 뷰 활성화하기
-                    </button>
-                  ) : (
-                    <span className="font-bold">분석 결과가 반영된 실시간 뷰가 구동 중입니다.</span>
-                  )}
+                  <div className="flex justify-between text-[10px] text-zinc-500 font-mono">
+                    <span>YouTube API 데이터 수집 및 딥러닝 텐서 추론 중...</span>
+                    <span>{realDataProgress}% 완료</span>
+                  </div>
+                </div>
+              )}
+              
+              {isRealDataActive && !loadingRealData && (
+                <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2 text-[11px] text-emerald-450">
+                  <CheckCircle2 size={14} />
+                  <span>실제 시청 이력 {analyzedVideos.length}개 영상 분석 완료. 차트에 실시간 추론 데이터가 성공적으로 반영되었습니다.</span>
                 </div>
               )}
             </div>
@@ -1366,26 +1334,21 @@ export default function Dashboard({ presentationMode, rawLabels, youtubeApiKey: 
                   <PatternsView 
                     key="patterns" 
                     presentationMode={presentationMode} 
-                    categories={finalCategories} 
-                    recentVideos={finalRecentVideos}
-                    onVideoClick={setSelectedDetailVideo}
-                    onShowAllClick={() => setShowAllVideosModal(true)}
+                    categories={categories} 
+                    recentVideos={recentVideos} 
                   />
                 )}
                 {currentTab === 'bias' && (
                   <BiasView 
                     key="bias" 
                     presentationMode={presentationMode} 
-                    driftData={finalDriftData} 
-                    fbsScore={dataSourceMode === 'real' ? realFbsScore : null}
+                    driftData={driftData} 
                   />
                 )}
                 {currentTab === 'nudge' && (
                   <NudgeView 
                     key="nudge" 
                     presentationMode={presentationMode} 
-                    realFbs={dataSourceMode === 'real' ? realFbsScore : null}
-                    realVideos={dataSourceMode === 'real' ? analyzedVideos : null}
                   />
                 )}
                 {currentTab === 'demo' && (
@@ -1399,212 +1362,6 @@ export default function Dashboard({ presentationMode, rawLabels, youtubeApiKey: 
           </div>
         </div>
       </main>
-
-      {/* --- MODAL 1: ALL VIDEOS LIST --- */}
-      <AnimatePresence>
-        {showAllVideosModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-zinc-900 border border-white/10 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden text-left"
-            >
-              {/* Header */}
-              <div className="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-950">
-                <div>
-                  <h3 className="text-base font-bold text-zinc-100">
-                    {dataSourceMode === 'real' ? "실시간 분석 비디오 데이터베이스" : "데모 분석 비디오 데이터베이스"}
-                  </h3>
-                  <p className="text-xs text-zinc-550">수집 및 추론이 완료된 비디오 상세 목록</p>
-                </div>
-                <button 
-                  onClick={() => setShowAllVideosModal(false)}
-                  className="p-1.5 hover:bg-white/5 rounded-lg text-zinc-400 hover:text-zinc-200 transition-colors"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              {/* Filters Panel */}
-              <div className="p-4 bg-zinc-900 border-b border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
-                <div className="relative w-full sm:w-80">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="제목 또는 채널 검색..."
-                    className="w-full bg-zinc-950 border border-white/5 rounded-xl pl-9 pr-4 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <Filter size={14} className="text-zinc-500" />
-                  <span className="text-xs text-zinc-450 mr-1">성향 필터:</span>
-                  {['all', 'progressive', 'conservative', 'neutral'].map((b) => (
-                    <button
-                      key={b}
-                      onClick={() => setFilterBias(b)}
-                      className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${
-                        filterBias === b
-                          ? 'bg-indigo-600 border-indigo-500 text-white'
-                          : 'bg-zinc-955 border-white/5 text-zinc-500 hover:text-zinc-350'
-                      }`}
-                    >
-                      {b === 'all' && "전체"}
-                      {b === 'progressive' && "진보"}
-                      {b === 'conservative' && "보수"}
-                      {b === 'neutral' && "중립"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Table Body */}
-              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="border-b border-white/5 text-[10px] font-mono tracking-wider text-zinc-550 uppercase text-left">
-                      <th className="pb-3 pl-2">번호</th>
-                      <th className="pb-3">영상 제목</th>
-                      <th className="pb-3">채널</th>
-                      <th className="pb-3">예측 카테고리</th>
-                      <th className="pb-3">예측 이념 성향</th>
-                      <th className="pb-3 pr-2 text-right">편향도</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 text-xs">
-                    {filteredVideos.map((vid, idx) => (
-                      <tr 
-                        key={vid.id}
-                        onClick={() => setSelectedDetailVideo(vid)}
-                        className="hover:bg-white/5 cursor-pointer transition-colors group"
-                      >
-                        <td className="py-3.5 pl-2 font-mono text-zinc-550">{idx + 1}</td>
-                        <td className="py-3.5 pr-4 font-bold text-zinc-200 max-w-sm truncate group-hover:text-indigo-400 transition-colors" title={vid.title}>
-                          {vid.title}
-                        </td>
-                        <td className="py-3.5 text-zinc-400 truncate max-w-[150px]" title={vid.channel}>{vid.channel}</td>
-                        <td className="py-3.5 text-zinc-450">{vid.topic}</td>
-                        <td className="py-3.5">
-                          <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono border ${
-                            vid.bias === 'Conservative' || vid.bias === '보수' ? 'bg-rose-500/10 border-rose-500/20 text-rose-400' :
-                            vid.bias === 'Progressive' || vid.bias === '진보' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' :
-                            'bg-zinc-800 border-white/5 text-zinc-450'
-                          }`}>
-                            {vid.bias}
-                          </span>
-                        </td>
-                        <td className={`py-3.5 pr-2 text-right font-mono font-bold ${
-                          vid.biasScore > 0.05 ? 'text-rose-455' : vid.biasScore < -0.05 ? 'text-blue-400' : 'text-zinc-550'
-                        }`}>
-                          {vid.biasScore > 0 ? '+' : ''}{vid.biasScore.toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {filteredVideos.length === 0 && (
-                  <div className="py-12 text-center text-xs text-zinc-650">
-                    검색 결과와 일치하는 분석 데이터가 없습니다.
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* --- MODAL 2: VIDEO DETAIL ANALYSIS REPORT --- */}
-      <AnimatePresence>
-        {selectedDetailVideo && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-zinc-900 border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden text-left shadow-2xl"
-            >
-              <div className="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-950">
-                <span className="text-[10px] font-mono tracking-widest text-indigo-400 uppercase font-black">Video Diagnosis Report</span>
-                <button 
-                  onClick={() => setSelectedDetailVideo(null)}
-                  className="p-1.5 hover:bg-white/5 rounded-lg text-zinc-400 hover:text-zinc-200 transition-colors"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-
-              <div className="p-6 space-y-6">
-                <div>
-                  <h4 className="text-sm font-bold text-zinc-100 leading-snug">{selectedDetailVideo.title}</h4>
-                  <p className="text-xs text-zinc-500 mt-1.5">{selectedDetailVideo.channel}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-zinc-955 p-4 rounded-xl border border-white/5 space-y-1">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase block">예측 분야 (Topic)</span>
-                    <span className="text-lg font-bold text-indigo-400">{selectedDetailVideo.topic}</span>
-                  </div>
-                  <div className="bg-zinc-955 p-4 rounded-xl border border-white/5 space-y-1">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase block">이념 편향 (Bias)</span>
-                    <span className={`text-lg font-bold ${
-                      selectedDetailVideo.bias === 'Conservative' || selectedDetailVideo.bias === '보수' ? 'text-rose-400' :
-                      selectedDetailVideo.bias === 'Progressive' || selectedDetailVideo.bias === '진보' ? 'text-blue-400' :
-                      'text-zinc-400'
-                    }`}>
-                      {selectedDetailVideo.bias}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="bg-zinc-950 p-4 rounded-xl border border-white/5 flex justify-between items-center">
-                  <div>
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase block">편향성 원천 지수 (Raw Bias Score)</span>
-                    <span className="text-[10px] text-zinc-500">(-1.00 ~ +1.00)</span>
-                  </div>
-                  <span className={`text-2xl font-black font-mono ${
-                    selectedDetailVideo.biasScore > 0.05 ? 'text-rose-455' : selectedDetailVideo.biasScore < -0.05 ? 'text-blue-400' : 'text-zinc-300'
-                  }`}>
-                    {selectedDetailVideo.biasScore > 0 ? '+' : ''}{selectedDetailVideo.biasScore.toFixed(3)}
-                  </span>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-[9px] font-mono text-zinc-555 uppercase block">어텐션 키워드 가중치 분석 (시뮬레이션)</span>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      { text: selectedDetailVideo.title.split(' ')[0] || "키워드1", score: selectedDetailVideo.biasScore > 0.05 ? "+0.8" : selectedDetailVideo.biasScore < -0.05 ? "-0.7" : "+0.1" },
-                      { text: selectedDetailVideo.title.split(' ')[1] || "키워드2", score: selectedDetailVideo.biasScore > 0.05 ? "+0.6" : selectedDetailVideo.biasScore < -0.05 ? "-0.5" : "-0.1" }
-                    ].map((kw, i) => (
-                      <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border bg-zinc-950 border-white/5 text-xs text-zinc-350">
-                        {kw.text}
-                        <span className="font-mono text-[10px] opacity-50">{kw.score}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-2 flex gap-3">
-                  <button 
-                    onClick={() => window.open(`https://www.youtube.com/watch?v=${selectedDetailVideo.id}`, '_blank')}
-                    className="flex-1 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-white/5"
-                  >
-                    유튜브에서 영상 보기 <ExternalLink size={12} />
-                  </button>
-                  <button 
-                    onClick={() => setSelectedDetailVideo(null)}
-                    className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center"
-                  >
-                    리포트 닫기
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

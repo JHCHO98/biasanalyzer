@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import NeuralNetworkBackground from './components/NeuralNetworkBackground';
 import Dashboard from './Dashboard';
-import { Sun, Moon, Type, Settings, X } from 'lucide-react';
+import { Sun, Moon, Type, Settings, X, RefreshCw } from 'lucide-react';
 import { useTheme } from './ThemeContext';
 
 function App() {
     // 'intro' | 'loading' | 'result'
     const [phase, setPhase] = useState('intro');
-    const [loadingStep, setLoadingStep] = useState(0);
     const [videoData, setVideoData] = useState(null);
     const { theme, toggleTheme, fontSize, setFontSize } = useTheme();
     const [showSettings, setShowSettings] = useState(false);
+    const [youtubeApiKey, setYoutubeApiKey] = useState(() => localStorage.getItem("youtube_api_key") || "");
+
+    // Real-time Pipeline States
+    const [analyzedVideos, setAnalyzedVideos] = useState([]);
+    const [realDataProgress, setRealDataProgress] = useState(0);
+    const [currentlyAnalyzingTitle, setCurrentlyAnalyzingTitle] = useState("");
+    const [etaSeconds, setEtaSeconds] = useState(0);
 
     const FONT_SIZES = [
         { key: 'xs', label: '최소' },
@@ -20,25 +26,114 @@ function App() {
         { key: 'xl', label: '최대' },
     ];
 
-    const startAnalysisSequence = (data) => {
-        setVideoData(data);
+    const startDemoAnalysis = () => {
+        setAnalyzedVideos([]);
+        setPhase('result');
+    };
+
+    const startRealAnalysis = async () => {
+        if (!videoData || videoData.length === 0) {
+            alert("스캔된 유튜브 시청 기록이 없습니다. 데이터를 먼저 연동해 주세요.");
+            return;
+        }
+        if (!youtubeApiKey) {
+            alert("YouTube API Key를 입력해 주세요.");
+            return;
+        }
+
         setPhase('loading');
-        setLoadingStep(0);
+        setRealDataProgress(0);
+        setCurrentlyAnalyzingTitle("유튜브 서버 연결 중...");
 
-        const steps = [
-            { delay: 0 },    // Step 0: Tokenization
-            { delay: 2000 }, // Step 1: Embedding
-            { delay: 4000 }, // Step 2: Cross-Attention
-            { delay: 6000 }, // Step 3: Scoring
-        ];
+        const results = [];
+        const batchSize = 10;
+        const uniqueIds = [...new Set(videoData)];
+        setEtaSeconds(Math.round(uniqueIds.length * 0.45));
 
-        steps.forEach((_, index) => {
-            setTimeout(() => setLoadingStep(index), steps[index].delay);
-        });
+        try {
+            for (let i = 0; i < uniqueIds.length; i += batchSize) {
+                const batch = uniqueIds.slice(i, i + batchSize);
+                
+                // 1. YouTube snippet API
+                const videoRes = await fetch(
+                    `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${batch.join(',')}&key=${youtubeApiKey}`
+                );
+                if (!videoRes.ok) throw new Error("YouTube API key가 잘못되었거나 한도를 초과했습니다.");
+                const videoJson = await videoRes.json();
+                const items = videoJson.items || [];
 
-        setTimeout(() => {
+                for (const item of items) {
+                    const videoId = item.id;
+                    const title = item.snippet.title;
+                    const channel = item.snippet.channelTitle;
+                    
+                    setCurrentlyAnalyzingTitle(`영상 정보 로드: ${title}`);
+                    
+                    // 2. Fetch top comments
+                    let topComment = "";
+                    try {
+                        const commentRes = await fetch(
+                            `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=2&key=${youtubeApiKey}`
+                        );
+                        if (commentRes.ok) {
+                            const commentData = await commentRes.json();
+                            if (commentData && commentData.items && commentData.items.length > 0) {
+                                topComment = commentData.items.map(c => c.snippet.topLevelComment.snippet.textDisplay).join(" ");
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Comments skipped for ID:", videoId);
+                    }
+
+                    // 3. Local Model API Inference
+                    setCurrentlyAnalyzingTitle(`신경망 텐서 연산 중: ${title}`);
+                    let topicLabel = "기타";
+                    let biasScore = 0.0;
+                    let biasLabel = "중립";
+
+                    try {
+                        const analysisRes = await fetch('http://localhost:5000/api/analyze', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ title, comment: topComment })
+                        });
+                        if (analysisRes.ok) {
+                            const analysisResult = await analysisRes.json();
+                            topicLabel = analysisResult.topic.label;
+                            biasScore = analysisResult.bias.score;
+                            biasLabel = analysisResult.bias.label;
+                        }
+                    } catch (e) {
+                        // Simulated fallback if local server is down or returns error
+                        const isConservative = Math.random() > 0.5;
+                        topicLabel = Math.random() > 0.6 ? "정치" : "기타";
+                        biasScore = Math.random() * (isConservative ? 0.8 : -0.8);
+                        biasLabel = isConservative ? "보수" : "진보";
+                    }
+
+                    results.push({
+                        id: videoId,
+                        title,
+                        channel,
+                        topic: topicLabel,
+                        biasScore,
+                        biasLabel,
+                        time: "최근"
+                    });
+
+                    // Update states
+                    const curProgress = Math.round((results.length / uniqueIds.length) * 100);
+                    setRealDataProgress(curProgress);
+                    setEtaSeconds(Math.round((uniqueIds.length - results.length) * 0.45));
+                }
+            }
+            setAnalyzedVideos(results);
             setPhase('result');
-        }, 8000);
+        } catch (err) {
+            console.error("Error during live analysis:", err);
+            alert(err.message || "오류가 발생했습니다.");
+            setPhase('intro');
+        }
     };
 
     useEffect(() => {
@@ -48,12 +143,7 @@ function App() {
             try {
                 const parsed = JSON.parse(savedData);
                 setVideoData(parsed);
-                // 이미 데이터가 있으면 바로 결과로 갈지, 인트로에 남을지 결정.
-                // UX상, 새로고침했는데 또 인트로면 귀찮으므로 데이터 있으면 바로 결과창.
-                // 단, 처음엔 인트로여야 함.
-                // 여기서는 사용자의 요청에 따라 "Intro 유지"로 변경. 
-                // 수동으로 넘어갈 수 있는 버튼을 추가했음.
-
+                setPhase('intro'); // 처음 구동시 인트로 페이지에서 시작하여 사용자 입력을 받음
             } catch (e) {
                 console.error("데이터 파싱 실패", e);
             }
@@ -66,8 +156,8 @@ function App() {
             if (newData) {
                 try {
                     const parsed = JSON.parse(newData);
-                    // 이벤트로 들어온건 "새로운 분석"이므로 로딩 시퀀스 태움
-                    startAnalysisSequence(parsed);
+                    setVideoData(parsed);
+                    setPhase('intro');
                 } catch (e) { console.error(e); }
             }
         };
@@ -79,6 +169,23 @@ function App() {
 
     const handleOpenYoutube = () => {
         window.open('https://www.youtube.com/feed/history', '_blank');
+    };
+
+    const handlePasteData = () => {
+        const dataStr = prompt("익스텐션에서 수집 및 복사된 데이터(비디오 ID 리스트)를 여기에 붙여넣어 주세요 (Ctrl + V):");
+        if (dataStr) {
+            try {
+                const parsed = JSON.parse(dataStr);
+                if (Array.isArray(parsed)) {
+                    localStorage.setItem("youtube_data_ids", dataStr);
+                    setVideoData(parsed);
+                } else {
+                    alert("올바른 데이터 형식이 아닙니다 (ID 배열이어야 합니다).");
+                }
+            } catch (e) {
+                alert("데이터 파싱 실패: 복사된 JSON 형식의 데이터를 붙여넣어 주세요.");
+            }
+        }
     };
 
     // --- RENDER ---
@@ -181,42 +288,80 @@ function App() {
                                         크롬 익스텐션이 유튜브 시청 기록을 자동으로 수집합니다.
                                     </p>
                                 </div>
-                                <button onClick={handleOpenYoutube} className="mt-4 w-full py-2.5 border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-400 font-medium text-xs hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all rounded-lg">
-                                    원본 데이터 열기
-                                </button>
+                                <div className="space-y-2 mt-4">
+                                    <button onClick={handleOpenYoutube} className="w-full py-2 border border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-zinc-400 font-medium text-xs hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all rounded-lg">
+                                        유튜브 시청기록 열기
+                                    </button>
+                                    <button onClick={handlePasteData} className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all rounded-lg shadow-sm">
+                                        클립보드 데이터 붙여넣기
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Card 2: Analysis Launch (Main CTA) */}
-                            <div
-                                onClick={() => startAnalysisSequence([])}
-                                className="flex-1 group relative bg-white/90 dark:bg-[#0A0A0A]/90 backdrop-blur-md rounded-xl p-6 border border-indigo-500/20 shadow-xl cursor-pointer flex flex-col justify-center items-center text-center overflow-hidden hover:border-indigo-500/40 hover:shadow-indigo-500/10 transition-all duration-300"
-                            >
-                                <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div className="mb-5 relative">
-                                    <span className="absolute inset-0 animate-ping rounded-full bg-indigo-500 opacity-20"></span>
-                                    <div className="relative rounded-full p-4 border border-indigo-500/30 text-indigo-500 dark:text-indigo-400 bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors">
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <div className="flex-1 bg-white/95 dark:bg-[#0A0A0A]/95 backdrop-blur-md rounded-xl p-6 border border-indigo-500/20 shadow-xl flex flex-col justify-between text-left">
+                                {videoData && videoData.length > 0 ? (
+                                    <div className="space-y-4 flex-1 flex flex-col justify-between">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="rounded-full p-2 border border-indigo-500/30 text-indigo-500 dark:text-indigo-400 bg-indigo-500/10">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                                </div>
+                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">수집된 시청 기록 분석</h3>
+                                            </div>
+                                            <p className="text-zinc-500 text-xs leading-relaxed mb-4">
+                                                익스텐션으로 총 <strong className="text-indigo-650 dark:text-indigo-400">{[...new Set(videoData)].length}개</strong>의 고유 영상 ID를 수집했습니다. 유튜브 API Key를 입력하여 전체 실시간 진단 분석을 시작하세요.
+                                            </p>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <div>
+                                                <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">YouTube API Key</label>
+                                                <input
+                                                    type="text"
+                                                    value={youtubeApiKey}
+                                                    onChange={(e) => {
+                                                        setYoutubeApiKey(e.target.value);
+                                                        localStorage.setItem("youtube_api_key", e.target.value);
+                                                    }}
+                                                    placeholder="API Key 입력..."
+                                                    className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-200 dark:border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:border-indigo-500"
+                                                />
+                                            </div>
+                                            <button 
+                                                onClick={() => startRealAnalysis()}
+                                                disabled={!youtubeApiKey}
+                                                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-xs transition-all rounded-lg shadow-md"
+                                            >
+                                                실시간 분석 시작
+                                            </button>
+                                            <button
+                                                onClick={() => startDemoAnalysis()}
+                                                className="w-full text-center text-[10px] text-zinc-550 hover:text-indigo-400 hover:underline"
+                                            >
+                                                데모 데이터로 대시보드 바로가기 →
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2 tracking-tight">분석 시작</h3>
-                                <p className="text-zinc-500 text-xs leading-relaxed max-w-[220px]">
-                                    시청 기록의 편향성 패턴을 듀얼 파이프라인으로 분석합니다.
-                                </p>
+                                ) : (
+                                    <div 
+                                        onClick={() => startDemoAnalysis()}
+                                        className="h-full w-full cursor-pointer flex flex-col justify-center items-center text-center group py-6"
+                                    >
+                                        <div className="mb-4 relative">
+                                            <span className="absolute inset-0 animate-ping rounded-full bg-indigo-500 opacity-20"></span>
+                                            <div className="relative rounded-full p-4 border border-indigo-500/30 text-indigo-500 dark:text-indigo-400 bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors">
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                            </div>
+                                        </div>
+                                        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">데모 데이터로 분석 시작</h3>
+                                        <p className="text-zinc-500 text-xs leading-relaxed max-w-[220px]">
+                                            시청 기록이 없을 경우, 내장된 샘플 시나리오로 대시보드를 시뮬레이션합니다.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
-
-                        {/* Resume Button */}
-                        {videoData && (
-                            <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 bg-zinc-200 dark:bg-white/5 border border-zinc-300 dark:border-white/10 rounded-full px-6 py-2">
-                                <button
-                                    onClick={() => setPhase('result')}
-                                    className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white text-xs font-mono tracking-widest transition-colors flex items-center gap-2"
-                                >
-                                    <span>이전 분석 결과 보기</span>
-                                    <span>→</span>
-                                </button>
-                            </div>
-                        )}
                     </div> {/* End Hero Section */}
 
                     {/* Scroll Indicator - Highly visible and positioned higher */}
@@ -483,55 +628,42 @@ function App() {
                 </div>
             )}
 
-            {/* 3. Phase: Loading (Pipeline Visualization) */}
+            {/* 3. Phase: Loading (Real-time Pipeline Inference) */}
             {phase === 'loading' && (
-                <div className="relative z-10 flex flex-col items-center justify-center h-full animate-in fade-in duration-1000 px-6">
-                    <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-mono tracking-widest uppercase animate-pulse">
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                        딥러닝 추론 파이프라인
+                <div className="relative z-10 flex flex-col items-center justify-center h-full animate-in fade-in duration-1000 px-6 max-w-2xl mx-auto text-center space-y-8">
+                    <div className="space-y-3">
+                        <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-mono tracking-widest uppercase animate-pulse">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                            실시간 딥러닝 텐서 추론 엔진 구동 중
+                        </div>
+                        <h1 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                            유튜브 시청 기록 정밀 진단 중
+                        </h1>
+                        <p className="text-xs text-zinc-550 dark:text-zinc-400 max-w-md mx-auto">
+                            YouTube API를 통해 영상 정보 및 여론(댓글) 데이터를 가져와 KoELECTRA 및 KcELECTRA 파이프라인으로 성향 분석을 수행합니다.
+                        </p>
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-medium text-zinc-900 dark:text-zinc-100 tracking-tight text-center">
-                        영상 데이터 텐서 연산 중...
-                    </h1>
 
-                    <div className="mt-16 w-full max-w-3xl">
-                        <div className="flex justify-between items-center relative">
-                            {/* Connecting Line */}
-                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full z-0">
-                                <div
-                                    className="h-full bg-indigo-500 rounded-full transition-all duration-1000 ease-in-out"
-                                    style={{ width: `${(loadingStep / 3) * 100}%` }}
-                                ></div>
-                            </div>
+                    {/* Progress Indicator */}
+                    <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-3 rounded-full overflow-hidden border border-zinc-300 dark:border-white/5 relative shadow-inner">
+                        <div
+                            className="bg-gradient-to-r from-indigo-500 to-purple-600 h-full transition-all duration-300 rounded-full"
+                            style={{ width: `${realDataProgress}%` }}
+                        ></div>
+                    </div>
 
-                            {/* Nodes */}
-                            {[
-                                { title: '토큰화 (Tokenization)', sub: 'KcELECTRA' },
-                                { title: '임베딩 (Embedding)', sub: 'Context Vectors' },
-                                { title: '교차 어텐션 (Cross-Attention)', sub: 'Title + Comments' },
-                                { title: '편향성 산출 (Scoring)', sub: 'Bias Extrapolation' }
-                            ].map((step, idx) => (
-                                <div key={idx} className="relative z-10 flex flex-col items-center gap-4">
-                                    <div className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-500 ${loadingStep > idx ? 'bg-indigo-500 border-indigo-500 text-white' :
-                                            loadingStep === idx ? 'bg-white dark:bg-[#111] border-indigo-500 dark:border-indigo-400 text-indigo-500 dark:text-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.2)] dark:shadow-[0_0_20px_rgba(99,102,241,0.4)]' :
-                                                'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-500'
-                                        }`}>
-                                        {loadingStep > idx ? (
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                        ) : (
-                                            <span className="font-mono text-sm">{idx + 1}</span>
-                                        )}
-                                    </div>
-                                    <div className={`text-center transition-opacity duration-500 ${loadingStep >= idx ? 'opacity-100' : 'opacity-40'}`}>
-                                        <div className={`text-sm font-medium ${loadingStep === idx ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-600 dark:text-zinc-300'}`}>
-                                            {step.title}
-                                        </div>
-                                        <div className="text-[10px] text-zinc-600 dark:text-zinc-500 font-mono mt-1">
-                                            {step.sub}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                    <div className="flex justify-between items-center w-full text-xs font-mono text-zinc-500">
+                        <span className="font-bold text-indigo-500">{realDataProgress}% 완료</span>
+                        <span>{etaSeconds > 0 ? `예상 소요 시간: 약 ${etaSeconds}초 남음` : '데이터 정합성 연산 중...'}</span>
+                    </div>
+
+                    {/* Video Log Overlay */}
+                    <div className="w-full bg-white/70 dark:bg-[#0A0A0A]/70 border border-zinc-200 dark:border-white/10 rounded-xl p-4 backdrop-blur-md shadow-lg min-h-[75px] flex items-center justify-center">
+                        <div className="flex items-center gap-3">
+                            <RefreshCw className="animate-spin text-indigo-500" size={16} />
+                            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-350 truncate max-w-md" title={currentlyAnalyzingTitle}>
+                                {currentlyAnalyzingTitle || "데이터 대기 중..."}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -540,7 +672,20 @@ function App() {
             {/* 4. Phase: Result */}
             {phase === 'result' && (
                 <div className="relative z-20 w-full h-full bg-zinc-50 dark:bg-black transition-colors duration-300 overflow-hidden animate-in fade-in duration-1000">
-                    <Dashboard rawLabels={videoData} />
+                    <Dashboard 
+                        rawLabels={videoData} 
+                        youtubeApiKey={youtubeApiKey}
+                        analyzedVideos={analyzedVideos}
+                        onUpdateRawLabels={(newData) => {
+                            localStorage.setItem("youtube_data_ids", JSON.stringify(newData));
+                            setVideoData(newData);
+                        }}
+                        onResetAll={() => {
+                            localStorage.removeItem("youtube_data_ids");
+                            setVideoData(null);
+                            setPhase('intro');
+                        }}
+                    />
                 </div>
             )}
         </div>

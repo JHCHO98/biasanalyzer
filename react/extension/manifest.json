@@ -12,12 +12,6 @@
         "http://localhost:3000/*"
     ],
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": "unrevr.png"
-    },
-    "icons": {
-        "16": "unrevr.png",
-        "48": "unrevr.png",
-        "128": "unrevr.png"
+        "default_popup": "popup.html"
     }
 }

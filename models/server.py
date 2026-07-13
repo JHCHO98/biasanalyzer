@@ -87,7 +87,7 @@ class AnalysisRequest(BaseModel):
 def startup_event():
     global tokenizer, topic_model, bias_model
     print("=" * 60)
-    print(f"📡 Device set to: {DEVICE}")
+    print(f"[Device] Device set to: {DEVICE}")
     print("=" * 60)
     
     try:
@@ -159,10 +159,10 @@ def startup_event():
         bias_model.to(DEVICE)
         bias_model.eval()
         
-        print("✅ Clean models initialized and state dict weights successfully loaded.")
+        print("[Success] Clean models initialized and state dict weights successfully loaded.")
         print("=" * 60)
     except Exception as e:
-        print(f"❌ Initialization error: {e}")
+        print(f"[Error] Initialization error: {e}")
         # We don't crash startup to allow server configuration debugging, 
         # but endpoint requests will fail gracefully.
 
@@ -176,7 +176,7 @@ async def analyze(request: AnalysisRequest):
         )
     
     title = request.title.strip()
-    comment = request.comment.strip()
+    comment = request.comment.strip() or "댓글 없음"
     
     if not title:
         raise HTTPException(status_code=400, detail="Title field is required")
@@ -260,7 +260,7 @@ async def analyze(request: AnalysisRequest):
         
     except Exception as e:
         import traceback
-        print("❌ [Inference Error Traceback]:")
+        print("[Error] [Inference Error Traceback]:")
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Inference error: {str(e)}")
 
