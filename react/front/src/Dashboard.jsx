@@ -487,9 +487,92 @@ const BiasView = ({ presentationMode }) => {
 const DemoView = ({ presentationMode }) => {
   const [title, setTitle] = useState('');
   const [comment, setComment] = useState('');
+  const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
   const [isDemoMode, setIsDemoMode] = useState(false);
+
+  const PRESETS = [
+    {
+      name: "정치 (진보)",
+      title: "노무현 조롱이 그냥 웃긴 밈? 10대 극우화가 위험한 진짜 이유 | 정준희의 토요토론 | 문성호 청소년, 최은서 기자, 우석훈 경제학자",
+      comment: `진짜 심각해요. 10대 애들 사이에 스며든 혐오와 조롱 문화가 극단으로 치닫고 있어요. ㅠㅠ
+이명박정부부터 이런 혐오가 시작되었다.
+벌써 20년이 넘도록 극우들이 키워온 혐오들이 아이들에게 퍼진것임.
+초등 6학년 아이가 학교서 친구들이 노무현 대통령 얘기를 한다고 해서 너무 놀랐어요ㅜㅜ
+이명박 저는 이 사람을 현재 우리나라 극우로 가는 발판을 깐 사람이라고 생각하게 됩니다. (그리스도인으로 이름로 하나님을 믿는다고 말하는 이명박 그렇기에 더더욱 슬프고 오만하고 어리석은 인간의 말로를 봅니다.) 청소년들을 선동해 혐오 조장하는 사람들은 언젠가 본인이나 본인이 사랑하는 누군가에게 부메랑이 되어 돌아오게 된다는 사실을 역사는 말합니다. 그 때에야 피눈물 흘리게 될 것입니다.`,
+      url: "https://www.youtube.com/watch?v=IGuAELslFic",
+      color: "border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+    },
+    {
+      name: "정치 (보수)",
+      title: " 홍준표의 좋은 세상 만들기 ep.7 정통보수주의 복원이 시급하다",
+      comment: `홍카더운날씨에건강하세요❤❤❤❤❤❤❤
+감사합니다~♡
+의식수준이 높은 사람을 처음부터 선발해서 정치수업이 시작되어야 하는데 학벌위주랑 기회주의자를 선발한게 문제임니다ㆍ
+응원 합니다 🎉❤
+정통보수는 오직 온니홍❤
+사랑합니다 무대홍❤`,
+      url: "https://www.youtube.com/watch?v=Azs-zaTBXnQ",
+      color: "border-red-500/30 text-red-400 hover:bg-red-500/10"
+    },
+    {
+      name: "정치 (중립)",
+      title: " [다시보기] 제21대 대통령선거 후보자 토론회 - 정치 분야 (2025.5.27) / JTBC News",
+      comment: `JTBC는 대선 후보들의 토론 발언에 대한 '실시간 팩트체크'를 준비했습니다. 팩트체크 내용은 JTBC 뉴스 홈페이지( https://news.jtbc.co.kr/election/factcheck )과 유튜브 댓글, 포털 기사 등으로 확인하실 수 있습니다
+
+그냥 한 달 동안 매일 6시간씩 토론회 했으면 좋겠음. 깊이 들어갈만하면 시간 부족하고 논쟁이 붙었다하면 시간없어서 툭툭 끊기고 이건 뭐 토론 하나마나한 수준임. 쓸데없이 돌아다니면서 유세할 시간에 그냥 한달 내내 매일 토론만 주구장창 끝장 볼때까지 하는 것이 유권자들한테 훨씬 이득임. 원래 파고들수록 밑천이 드러나기 마련이고 밑천이 드러날 정도로 파고 들어가면 그 후보의 역량과 한계가 명확히 보이게 되어있음. 그 지점이 대통령을 결정하는 판단 근거로서 유의미한 포인트가 되는 거임. 제발 토론회를 좀 많이 늘려줬으면 좋겠다.
+아 보고있자니 너무 피로감느껴진다 이게 정녕 정치인들의 토론이 맞는가 ㅜ 진짜 해야할 이야기는 안하고 공격만 주고받네`,
+      url: "https://www.youtube.com/watch?v=5sw-aVUYsCA",
+      color: "border-zinc-500/30 text-zinc-400 hover:bg-zinc-500/10"
+    },
+    {
+      name: "스포츠 (비정치)",
+      title: "체코 압도한 한국, 공격의 시작에는 이강인 있었다｜지금 월드컵",
+      comment: `패스정확도100%인거 보고 고트구나 이강인이 경기장을 지배함 부상 없이 월드컵 화이팅!!
+진짜 이강인은 보물이다
+이강인 진짜 잘한다
+황인범도 너무 잘찼고, 이강인 어시스트는 예술이였다. 정말 잘 찼네`,
+      url: "https://www.youtube.com/watch?v=Vd3NOTd9dIQ",
+      color: "border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10"
+    },
+    {
+      name: "과학기술 (비정치)",
+      title: "똑같은 내용을 책으로 읽은 아이와 영상으로 본 아이의 충격적인 격차 #과학 #EBS지식",
+      comment: `내용 요약
+
+1. 읽을 때 우리 뇌에서 일어나는 일
+-문자 상자(VWFA): 좌반구 후두엽과 측두엽 경계에 위치한 영역으로, 문자를 볼 때 선택적으로 활성화되어 시각 정보와 의미 정보를 연결하는 관문 역할을 합니다. 문맹, 난독증 아동, 글을 배우기 전의 아이들의 뇌에서는 발견되지 않습니다.
+-뇌의 기적적인 협업: 눈이 글자를 보는 순간 후두엽(시각 처리) -> 문자 상자 -> 측두엽 및 전두엽(발음 및 의미 처리)이 연속적·병행적으로 활성화됩니다. 읽기는 뇌의 거의 대부분 영역을 사용하는 고차원적이고 복잡한 실시간 처리 과정입니다.
+
+2. 읽기의 원리와 '스카보로의 리딩 로프'
+-읽기는 후천적 학습의 영역: 인간은 말하기(구어) 능력을 타고나지만, 읽기는 약 5,400년 전에 시작된 인위적인 활동으로 반드시 따로 배워야 합니다.
+-리딩 로프(Reading Rope) 모델: 읽기 이해는 여러 요소가 촘촘히 꼬인 밧줄과 같습니다.
+-단어 인식: 문자 인식, 해독(디코딩), 소리값(음운) 이해
+-언어 이해: 어휘력, 배경 지식, 언어 구조, 문맥 및 추론 능력
+-곱셈의 법칙: 읽기 능력은 각 요소들의 '곱'으로 이루어집니다. 즉, 다른 능력이 아무리 뛰어나도 단 하나의 요소라도 결핍(0)되면 전체 읽기 능력이 작동하지 않습니다(0).
+
+3. 음운 처리와 난독증
+-소리의 중요성: 읽기를 단순한 시각 처리로 생각하기 쉽지만, 시각 정보를 말소리(의문 정보)로 바꾸는 과정이 필수적입니다. 상측두회가 이 과정을 담당하며, 이 영역의 활성화 정도가 높은 아동일수록 글 읽기 학습이 잘 이루어집니다.
+-난독증과 조기 치료: 난독증은 지능의 문제가 아니라 음운 지식과 해독 능력의 부족으로 발생합니다. 뇌의 가소성이 높은 어린 시절에 자음과 모음을 분리해 소리 내어 읽는 '음운 인식·소리 훈련'을 조기에 받으면 충분히 극복할 수 있습니다.
+
+4. 독서의 핵심 변수: 배경 지식과 속도
+-배경 지식의 힘 (빈익빈 부익부): 문해력이 높은 성인이라도 야구 지식이 전혀 없으면 야구 관련 글을 거의 이해하지 못하는 반면, 문해력이 낮아도 야구 지식이 풍부한 어린이는 글을 완벽히 이해하고 재연해 냅니다. 배경 지식이 많을수록 새로운 글을 더 쉽게 이해하고 기억하는 전략적 독서가 가능합니다.
+-빠른 글 읽기의 함정: 디지털 화면을 통해 안구의 도약(움직임)을 줄여 빠르게 읽는 방식은 속도는 높여주지만, 깊이 있는 이해와 추론, 배경 지식 활용을 방해하여 정보가 쉽게 휘발되고 정답률(이해돈)을 떨어뜨립니다.
+
+5. 영상(애니메이션) vs 독서
+-동일한 이야기를 영상으로 본 집단과 책으로 읽은 집단을 비교했을 때 뇌의 정보 처리 방식에서 큰 차이가 나타났습니다.
+-영상 시청: 시각 자극이 워낙 강력하여 뇌가 수동적으로 변합니다. 핵심 키워드(예: 보리수나무)나 제목을 잘 기억하지 못하며, 화면에 나온 이미지를 그대로 모방(복제)하는 경향을 보입니다.
+-독서: 능동적으로 페이지를 넘기며 머릿속 스케치북에 정보를 스스로 구체화하는 '정교한 정신적 표상'을 구축합니다. 이 과정에서 상상력과 창의력이 발휘되어 훨씬 더 풍부하고 고유한 이해에 도달하게 됩니다.
+
+요약하자면: 읽기는 타고난 뇌의 기능(시각, 기억, 언어 등)을 총동원하는 복잡한 과정입니다. 단순히 텍스트를 빠르게 훑거나 이미 만들어진 영상을 보는 것과 달리, 글자의 소리를 느끼고 배경 지식을 결합해 머릿속으로 상상하며 읽는 독서야말로 뇌를 가장 활성화하는 고차원적인 인지 활동입니다.
+교보문고 알라딘 예스24가 이 영상을 좋아합니다
+아주단순한 거임..책이 뇌를 더 활성화 시킨다는 거..책은 그냥 읽자.
+미래에도 책이 사라지지 않는다는 증거네요`,
+      url: "https://www.youtube.com/watch?v=GaFml8uvkYE",
+      color: "border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
+    }
+  ];
 
   const handleAnalyze = async (e) => {
     e.preventDefault();
@@ -520,9 +603,11 @@ const DemoView = ({ presentationMode }) => {
         isLive: true,
         topic: data.topic.label,
         topicConf: (data.topic.confidence * 100).toFixed(1),
+        topicProbs: data.topic.probabilities || [],
         score: data.bias.score.toFixed(2),
         label: data.bias.label,
         biasConf: (data.bias.confidence * 100).toFixed(1),
+        biasProbs: data.bias.probabilities || [],
         keywords: [
           { text: title.split(' ')[0] || "유튜브", score: (Math.random() * 0.8 + 0.2).toFixed(1) * (isConservative ? 1 : -1) },
           { text: "실시간", score: (Math.random() * 0.5).toFixed(1) },
@@ -536,13 +621,34 @@ const DemoView = ({ presentationMode }) => {
         setIsAnalyzing(false);
         setIsDemoMode(true);
         const isConservative = Math.random() > 0.5;
+        const topicConfVal = Math.random() * 20 + 75; // e.g. 85.5%
+        const mockTopicProbs = [
+          { label: "정치", confidence: topicConfVal / 100 },
+          { label: "예능", confidence: ((100 - topicConfVal) * 0.65) / 100 },
+          { label: "인물/블로그", confidence: ((100 - topicConfVal) * 0.35) / 100 },
+        ];
+        
+        const biasConfVal = Math.random() * 20 + 75; // e.g. 80%
+        const remainingBias = 100 - biasConfVal;
+        const primaryBias = isConservative ? '보수' : '진보';
+        const secondaryBias = '중립';
+        const tertiaryBias = isConservative ? '진보' : '보수';
+        
+        const mockBiasProbs = [
+          { label: primaryBias, confidence: biasConfVal / 100 },
+          { label: secondaryBias, confidence: (remainingBias * 0.7) / 100 },
+          { label: tertiaryBias, confidence: (remainingBias * 0.3) / 100 }
+        ];
+
         setResult({
           isLive: false,
           topic: "정치",
-          topicConf: (Math.random() * 20 + 75).toFixed(1),
+          topicConf: topicConfVal.toFixed(1),
+          topicProbs: mockTopicProbs,
           score: (Math.random() * (isConservative ? 1 : -1)).toFixed(2),
-          label: isConservative ? '보수' : '진보',
-          biasConf: (Math.random() * 20 + 75).toFixed(1),
+          label: primaryBias,
+          biasConf: biasConfVal.toFixed(1),
+          biasProbs: mockBiasProbs,
           keywords: [
             { text: title.split(' ')[0] || "유튜브", score: (Math.random() * 0.8 + 0.2).toFixed(1) * (isConservative ? 1 : -1) },
             { text: "데모 모드", score: (Math.random() * 0.5).toFixed(1) },
@@ -563,7 +669,37 @@ const DemoView = ({ presentationMode }) => {
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
         <Card title="모델 인터랙티브 테스트" subtitle="영상 제목과 댓글을 입력하여 모델의 편향성 및 카테고리 판별 과정을 직접 시연해 보세요." className="h-full">
-          <form onSubmit={handleAnalyze} className="flex flex-col h-full mt-4 space-y-6">
+          <form onSubmit={handleAnalyze} className="flex flex-col h-full mt-4 space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-zinc-400">발표용 데모 프리셋 (클릭 시 자동 완성)</label>
+              <div className="flex flex-wrap gap-1.5">
+                {PRESETS.map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setTitle(preset.title);
+                      setComment(preset.comment);
+                      setUrl(preset.url || '');
+                    }}
+                    className={`px-2 py-1.5 rounded-lg border text-xs font-semibold bg-zinc-900/20 dark:bg-zinc-900/60 transition-colors ${preset.color}`}
+                  >
+                    {preset.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-zinc-400">유튜브 영상 링크 (선택사항)</label>
+              <a
+                href={url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-700 focus:outline-none focus:border-indigo-500/50 transition-colors"
+              >{url}</a>
+            </div>
+
             <div className="space-y-2">
               <label className="text-xs font-medium text-zinc-400">영상 제목</label>
               <input
@@ -575,13 +711,13 @@ const DemoView = ({ presentationMode }) => {
                 required
               />
             </div>
-            <div className="space-y-2 flex-1 flex flex-col">
+            <div className="space-y-2 flex flex-col">
               <label className="text-xs font-medium text-zinc-400">주요 댓글 (선택사항)</label>
               <textarea
                 value={comment}
                 onChange={e => setComment(e.target.value)}
                 placeholder="예: 이 영상 보고 구독 취소합니다..."
-                className="w-full flex-1 bg-zinc-100 dark:bg-black/50 border border-zinc-200 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-700 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none custom-scrollbar"
+                className="w-full h-24 bg-zinc-100 dark:bg-black/50 border border-zinc-200 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-700 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none custom-scrollbar"
               />
             </div>
             <button
@@ -619,61 +755,133 @@ const DemoView = ({ presentationMode }) => {
               </div>
             )}
 
-            {result && !isAnalyzing && (
-              <div className="w-full h-full flex flex-col space-y-6 mt-2 animate-in fade-in zoom-in-95 duration-500">
-                
-                {isDemoMode && (
-                  <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 text-xs text-amber-400">
-                    <AlertCircle size={14} />
-                    <span>로컬 API 서버 연결 실패 - 시뮬레이션 데모 모드로 동작 중</span>
-                  </div>
-                )}
+            {result && !isAnalyzing && (() => {
+              const isPoliticsRelated = result.topicProbs && result.topicProbs.slice(0, 3).some(item => item.label === "정치");
+              return (
+                <div className="w-full h-full flex flex-col space-y-4 mt-0 animate-in fade-in zoom-in-95 duration-500">
+                  
+                  {isDemoMode && (
+                    <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-1.5 text-xs text-amber-400">
+                      <AlertCircle size={14} />
+                      <span>로컬 API 서버 연결 실패 - 시뮬레이션 데모 모드로 동작 중</span>
+                    </div>
+                  )}
 
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Topic Box */}
-                  <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center space-y-1">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">예측 카테고리 (Topic)</span>
-                    <span className="text-2xl font-bold text-indigo-400">{result.topic}</span>
-                    <span className="text-xs text-zinc-400">신뢰도: {result.topicConf}%</span>
-                  </div>
-
-                  {/* Bias Box */}
-                  <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center space-y-1">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">정치 성향 (Bias)</span>
-                    <span className={`text-2xl font-bold ${result.label === '보수' ? 'text-red-400' : result.label === '진보' ? 'text-blue-400' : 'text-zinc-400'}`}>
-                      {result.label}
-                    </span>
-                    <span className="text-xs text-zinc-400">신뢰도: {result.biasConf}%</span>
-                  </div>
-                </div>
-
-                {/* Detailed Score Indicator */}
-                <div className="flex flex-col items-center text-center space-y-2 py-2 bg-zinc-900/40 border border-white/5 rounded-xl p-4">
-                  <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">편향성 지수 (Bias Score)</div>
-                  <div className={`text-4xl font-semibold tracking-tight ${result.score > 0 ? 'text-red-400' : result.score < 0 ? 'text-blue-400' : 'text-zinc-400'}`}>
-                    {result.score > 0 ? '+' : ''}{result.score}
-                  </div>
-                  <div className="text-[10px] text-zinc-500">(-1.00: 진보 편향 ~ +1.00: 보수 편향)</div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="text-xs font-medium text-zinc-500">어텐션 가중치 (추출된 핵심 키워드)</div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.keywords.map((kw, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium border bg-zinc-800/50 border-white/10 text-zinc-300"
+                  {result.url && (
+                    <div className="flex items-center gap-1.5 text-xs text-zinc-400 px-1 py-1 relative z-10">
+                      <PlayCircle size={14} className="text-zinc-500 shrink-0" />
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 shrink-0">원본 링크:</span>
+                      <a 
+                        href={result.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(result.url, '_blank');
+                        }}
+                        className="text-indigo-400 hover:text-indigo-300 hover:underline truncate flex-1 font-mono text-xs cursor-pointer relative z-20 pointer-events-auto"
                       >
-                        {kw.text}
-                        <span className="font-mono opacity-50 text-xs">
-                          {kw.score > 0 ? '+' : ''}{kw.score}
+                        {result.url}
+                      </a>
+                    </div>
+                  )}
+
+                  <div className={isPoliticsRelated ? "grid grid-cols-2 gap-3" : "grid grid-cols-1 gap-3"}>
+                    {/* Topic Box */}
+                    <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-3 flex flex-col items-center text-center space-y-1">
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">예측 카테고리 (Topic)</span>
+                      <span className="text-xl font-bold text-indigo-400">{result.topic}</span>
+                      <span className="text-xs text-zinc-400">신뢰도: {result.topicConf}%</span>
+                    </div>
+
+                    {/* Bias Box */}
+                    {isPoliticsRelated && (
+                      <div className="bg-zinc-900/60 border border-white/5 rounded-xl p-3 flex flex-col items-center text-center space-y-1">
+                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">정치 성향 (Bias)</span>
+                        <span className={`text-xl font-bold ${result.label === '보수' ? 'text-red-400' : result.label === '진보' ? 'text-blue-400' : 'text-zinc-400'}`}>
+                          {result.label}
                         </span>
-                      </span>
-                    ))}
+                        <span className="text-xs text-zinc-400">신뢰도: {result.biasConf}%</span>
+                      </div>
+                    )}
                   </div>
+
+                  {/* Softmax Probability Distributions */}
+                  <div className={isPoliticsRelated ? "grid grid-cols-1 md:grid-cols-2 gap-3" : "grid grid-cols-1 gap-3"}>
+                    {/* Topic Softmax */}
+                    {result.topicProbs && result.topicProbs.length > 0 && (
+                      <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-3 space-y-2">
+                        <div className="text-[11px] font-semibold text-zinc-400">카테고리 확률 (상위 3개)</div>
+                        <div className="space-y-1.5">
+                          {result.topicProbs.slice(0, 3).map((item, idx) => (
+                            <div key={idx} className="space-y-0.5">
+                              <div className="flex justify-between text-xs">
+                                <span className="text-zinc-300 font-medium">{item.label}</span>
+                                <span className="text-indigo-400 font-mono">{(item.confidence * 100).toFixed(1)}%</span>
+                              </div>
+                              <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                <div 
+                                  className="bg-indigo-500 h-full rounded-full transition-all duration-500" 
+                                  style={{ width: `${item.confidence * 100}%` }}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Bias Softmax */}
+                    {isPoliticsRelated && result.biasProbs && result.biasProbs.length > 0 && (
+                      <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-3 space-y-2">
+                        <div className="text-[11px] font-semibold text-zinc-400">정치 성향 확률 분포</div>
+                        <div className="space-y-1.5">
+                          {result.biasProbs.map((item, idx) => {
+                            const isConservative = item.label.includes('보수') || item.label === '보수';
+                            const isProgressive = item.label.includes('진보') || item.label === '진보';
+                            const barColor = isConservative ? 'bg-red-500' : isProgressive ? 'bg-blue-500' : 'bg-zinc-500';
+                            const textColor = isConservative ? 'text-red-400' : isProgressive ? 'text-blue-400' : 'text-zinc-400';
+                            return (
+                              <div key={idx} className="space-y-0.5">
+                                <div className="flex justify-between text-xs">
+                                  <span className="text-zinc-300 font-medium">{item.label}</span>
+                                  <span className={`${textColor} font-mono`}>{(item.confidence * 100).toFixed(1)}%</span>
+                                </div>
+                                <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                  <div 
+                                    className={`${barColor} h-full rounded-full transition-all duration-500`} 
+                                    style={{ width: `${item.confidence * 100}%` }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {isPoliticsRelated && (
+                    <div className="space-y-2">
+                      <div className="text-[11px] font-medium text-zinc-500">어텐션 가중치 (추출된 핵심 키워드)</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {result.keywords.map((kw, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded border bg-zinc-800/50 border-white/10 text-xs font-medium text-zinc-300"
+                          >
+                            {kw.text}
+                            <span className="font-mono opacity-50 text-[10px] ml-1">
+                              {kw.score > 0 ? '+' : ''}{kw.score}
+                            </span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
         </Card>
       </div>

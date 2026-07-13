@@ -22,8 +22,15 @@ class KCELectraClassifier(nn.Module):
     def __init__(self, electra, num_classes):
         super(KCELectraClassifier, self).__init__()
         self.electra = electra
-        self.classifier = nn.Linear(768, num_classes)
-        nn.init.xavier_uniform_(self.classifier.weight) 
+        self.classifier = nn.Sequential(
+            nn.Linear(768, 256),
+            nn.GELU(),
+            nn.Dropout(0.3),
+            nn.Linear(256, 64),
+            nn.GELU(),
+            nn.Dropout(0.3),
+            nn.Linear(64, num_classes)
+        )
 
     def forward(self, input_ids, attention_mask, token_type_ids):
         outputs = self.electra(
@@ -73,13 +80,40 @@ def load_models():
     
     # Load Tokenizer
     print("Loading tokenizer...")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False)
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False, local_files_only=True)
+    except Exception:
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False)
     
     # Load Topic Classifier
     print(f"Loading Topic Classifier from {TOPIC_MODEL_PATH}...")
     if not os.path.exists(TOPIC_MODEL_PATH):
         raise FileNotFoundError(f"Topic classifier weights not found at {TOPIC_MODEL_PATH}")
-    topic_model = torch.load(TOPIC_MODEL_PATH, map_location=DEVICE, weights_only=False)
+    loaded_topic = torch.load(TOPIC_MODEL_PATH, map_location=DEVICE, weights_only=False)
+    
+    # Clean state dict keys (strip 'module.' prefix if DataParallel was used)
+    topic_state_dict = loaded_topic.state_dict() if hasattr(loaded_topic, 'state_dict') else loaded_topic
+    clean_topic_state = {}
+    for k, v in topic_state_dict.items():
+        name = k[7:] if k.startswith('module.') else k
+        clean_topic_state[name] = v
+        
+    # Detect actual class count from clean state dict keys (looking for final layer weight)
+    weight_key = next((k for k in clean_topic_state.keys() if k.endswith('classifier.6.bias')), None)
+    if weight_key is not None:
+        num_topic_classes = clean_topic_state[weight_key].shape[0]
+    else:
+        num_topic_classes = 14  # Default fallback
+        
+    # Instantiate clean native model
+    from transformers import AutoModel
+    try:
+        electra_topic = AutoModel.from_pretrained(MODEL_NAME, local_files_only=True)
+    except Exception:
+        electra_topic = AutoModel.from_pretrained(MODEL_NAME)
+        
+    topic_model = KCELectraClassifier(electra_topic, num_classes=num_topic_classes)
+    topic_model.load_state_dict(clean_topic_state)
     topic_model.to(DEVICE)
     topic_model.eval()
     print("✅ Topic Classifier loaded successfully.")
@@ -88,7 +122,33 @@ def load_models():
     print(f"Loading Bias Classifier from {BIAS_MODEL_PATH}...")
     if not os.path.exists(BIAS_MODEL_PATH):
         raise FileNotFoundError(f"Bias classifier weights not found at {BIAS_MODEL_PATH}")
-    bias_model = torch.load(BIAS_MODEL_PATH, map_location=DEVICE, weights_only=False)
+    loaded_bias = torch.load(BIAS_MODEL_PATH, map_location=DEVICE, weights_only=False)
+    
+    # Clean state dict keys for bias model
+    bias_state_dict = loaded_bias.state_dict() if hasattr(loaded_bias, 'state_dict') else loaded_bias
+    clean_bias_state = {}
+    for k, v in bias_state_dict.items():
+        name = k[7:] if k.startswith('module.') else k
+        clean_bias_state[name] = v
+        
+    bias_config = {
+        'model_name': "beomi/KcELECTRA-base",
+        'num_classes': 3,
+        'device': DEVICE
+    }
+    
+    # Temporarily force offline mode for BiasAnalyzer to prevent connection issues
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"
+    try:
+        bias_model = BiasAnalyzer(bias_config)
+    except Exception:
+        os.environ["TRANSFORMERS_OFFLINE"] = "0"
+        bias_model = BiasAnalyzer(bias_config)
+    finally:
+        if "TRANSFORMERS_OFFLINE" in os.environ:
+            del os.environ["TRANSFORMERS_OFFLINE"]
+            
+    bias_model.load_state_dict(clean_bias_state)
     bias_model.to(DEVICE)
     bias_model.eval()
     print("✅ Bias Classifier loaded successfully.")
@@ -99,7 +159,7 @@ def load_models():
 def run_topic_inference(title, comment, tokenizer, model):
     # Match the format used during training
     text_input = title + " [SEP] " + comment
-    encoding = tokenizer.encode_plus(
+    encoding = tokenizer(
         text_input,
         max_length=128,
         padding='max_length',

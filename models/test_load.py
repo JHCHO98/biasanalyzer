@@ -45,5 +45,14 @@ try:
     bias_model = torch.load(bias_model_path, map_location=DEVICE, weights_only=False)
     bias_model.eval()
     print("✅ Bias classifier loaded successfully!")
+    
+    # Dynamic patch to solve Hugging Face Transformers version mismatch
+    for model in (topic_model, bias_model):
+        if 'model' in locals() or 'topic_model' in locals():
+            for module in model.modules():
+                if module.__class__.__name__ == 'ElectraAttention':
+                    if not hasattr(module, 'is_cross_attention'):
+                        module.is_cross_attention = False
+    print("✅ Compatibility patches applied.")
 except Exception as e:
     print(f"❌ Failed to load bias classifier: {e}")
