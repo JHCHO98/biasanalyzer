@@ -40,7 +40,7 @@ print(f"KoELECTRA 하위 {UNFREEZE_LAST_N_LAYERS}개 레이어 unfreezing")
 
 try:
     data = pd.read_csv("models/Data/data_processed/TopicDataset_processed.csv")
-    data['text_input'] = data['title_clean'] + " [SEP] " + data['comment_clean'].fillna('')
+    data['text_input'] = data['title'] + " [SEP] " + data['comment'].fillna('')
     train_val_df, test_df = train_test_split(
         data, test_size=0.2, random_state=42, stratify=data['label_id']
     )
@@ -52,14 +52,14 @@ try:
 except FileNotFoundError:
     print("경고: 파일을 찾을 수 없습니다. 더미 데이터를 사용합니다.")
     train_data = {
-        'title_clean':   ['안녕하세요', 'KcELECTRA', '댓글이 중요합니다', '다중 클래스', '코드 작성'],
-        'comment_clean': ['영상 리뷰 좋아요', '구어체와 신조어가 많음', '이 모델로 분류합니다', '클래스 15개 충분', '최종적으로 완성'],
+        'title':   ['안녕하세요', 'KcELECTRA', '댓글이 중요합니다', '다중 클래스', '코드 작성'],
+        'comment': ['영상 리뷰 좋아요', '구어체와 신조어가 많음', '이 모델로 분류합니다', '클래스 15개 충분', '최종적으로 완성'],
         'label_id':      [0, 14, 7, 3, 11]
     }
     train_df = pd.DataFrame(train_data)
     val_df   = train_df.copy()
-    train_df['text_input'] = train_df['title_clean'] + " [SEP] " + train_df['comment_clean']
-    val_df['text_input']   = val_df['title_clean']   + " [SEP] " + val_df['comment_clean']
+    train_df['text_input'] = train_df['title'] + " [SEP] " + train_df['comment']
+    val_df['text_input']   = val_df['title']   + " [SEP] " + val_df['comment']
 
 
 # --- 1-1. Early Stopping 클래스 ---
