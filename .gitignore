@@ -4,6 +4,5 @@
 *.txt
 **/*.txt
 !/requirements.txt
-*.csv
 *.pyc
 models/Data/data_aug/mecab/

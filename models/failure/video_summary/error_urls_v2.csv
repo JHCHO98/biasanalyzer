@@ -1,0 +1,454 @@
+﻿url,index,error_msg,ans1,ans2
+UTa-2jhS9fY,3,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""대통령실의 6개월 성과를 3실장 및 수석비서관과 함께 실시간으로 논의하고 전달하는 것"",
+  ""key_entities"": [""대통령실"", ""3실장"", ""수석비서관""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+FaB7QDm3wz8,5,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""Lee Jae-myung announces a major transformation of land and space policy to expand Korea's use, presented to the Local Era Committee."",
+  ""key_entities"": [""이재명"", ""지방시대위원회""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+QnGUCpCf-1g,15,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""Lee Jae-myung's promotion of strong local autonomy and balanced growth policies"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.7
+}",Didn't Answered
+Tsvc5cUUiFE,71,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+SO1vNnYUil4,75,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""KOSPI index reaching 5000"",
+  ""key_entities"": [""KOSPI""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+Y-M3KKZnMMI,84,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.4
+}",Didn't Answered
+jIQKO6-LGlA,90,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [""트럼프""],
+  ""confidence_score"": 0.5
+}",Didn't Answered
+0Vj7k4_L6bc,91,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+z6Xg0GgFOzw,130,timed out,"{
+  ""content_tone"": 1,
+  ""intent"": ""Exploring the concept of beginners' luck in investing and questioning whether it truly exists."",
+  ""key_entities"": [],
+  ""confidence_score"": 0.7
+}",Didn't Answered
+aEjbrvWuWwM,157,timed out,"{  
+  ""content_tone"": 4,  
+  ""intent"": ""Provide legal commentary on recent judicial controversies, including the national judges meeting, the anger of judges at the '내란재판부', the legal aspects of Jang Kyung-tae's sexual assault scandal, and questioning the adequacy of the special prosecutor's actions."",  
+  ""key_entities"": [""양은경"", ""전국법원장 회의"", ""내란재판부"", ""장경태"", ""특검""],  
+  ""confidence_score"": 0.85  
+}",Didn't Answered
+MBT4XkJuHFo,178,timed out,Didn't Answered,"{
+  ""recovered_intent"": ""특검 영장 기각률이 평균보다 두 배 이상 높아 특검의 적절성에 대한 의문을 제기"",
+  ""comment_tone"": 5,
+  ""is_contaminated"": false,
+  ""context_bridge"": ""영상은 특검 영장 기각률에 대한 의문을 제기하며, 댓글은 정론을 응원하는 긍정적 반응을 보임."",
+  ""representative_comments"": [
+    ""정론에 응원합니다😅"",
+    ""특검이 필요 없다고 생각해"",
+    ""영장 기각률이 높아도 특검은 정당한"",
+    ""특검이 부당하다"",
+    ""특검이 필요한 이유를 설명해줘""
+  ]
+}"
+FIAFLyltrbc,196,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.3
+}",Didn't Answered
+jQVdlA5N2NM,211,timed out,"{
+  ""content_tone"": 7,
+  ""intent"": ""Park Na-rae's injection services are illegal, even if she has a Nobel Prize in Medicine."",
+  ""key_entities"": [""함익병"", ""박나래""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+NYb9RQRm0i0,229,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""전재수와의 직접 통화 결과를 전달하고, 그가 말한 '세상에 별일이 다 있네'라는 반응을 공유"",
+  ""key_entities"": [""전재수""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+78lPhTg8VlU,235,timed out,"{  
+  ""content_tone"": 4,  
+  ""intent"": ""박정훈이 한동훈 딸의 이름 공개를 인권 유린이라고 비판하는 내용 전달"",  
+  ""key_entities"": [""박정훈"", ""한동훈""],  
+  ""confidence_score"": 0.9  
+}",Didn't Answered
+Xf0anmqQ_H8,259,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""Lee Won-seok's betrayal while colluding with Seong Sang-nab"",
+  ""key_entities"": [""이원석"", ""성상납""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+9-FwewAbMXs,269,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""Kim Seong-tae's major scandal or wrongdoing is being exposed in a live news segment"",
+  ""key_entities"": [""김성태""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+3UEUR8qQ4_s,277,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [""문재인""],
+  ""confidence_score"": 0.3
+}",Didn't Answered
+sUtrX3jLgh4,292,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""Former President Park Geun-hye has abandoned her support for Han Dong-hoon."",
+  ""key_entities"": [""박근혜"", ""한동훈""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+z3KFsamDAek,296,timed out,"{
+  ""content_tone"": 8,
+  ""intent"": ""Report that Lee Jae-myung is an accomplice in a wrongdoing and is in danger, urging help."",
+  ""key_entities"": [""이재명""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+dyB8iqRbYIU,298,timed out,"{{
+  ""content_tone"": 6,
+  ""intent"": ""Expose the list of 선대위 associated with Han Dong-hoon"",
+  ""key_entities"": [""한동훈""],
+  ""confidence_score"": 0.9
+}}",Didn't Answered
+b310nCmslKA,393,timed out,"{
+  ""content_tone"": 9,
+  ""intent"": ""To warn viewers that Lee Jae‑myung is dangerous and that rebellion is now possible, encouraging opposition."",
+  ""key_entities"": [""김어준"", ""이재명""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+bd6K7Uteu0s,406,timed out,"{
+  ""content_tone"": 9,
+  ""intent"": ""Han Deok-soo will be imprisoned for treason and possibly executed."",
+  ""key_entities"": [""김어준"", ""한덕수""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+RNROi_1IqUQ,431,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""To present a special episode about the general election, focusing on Lee Hae-chan and discussing aspects of his background such as family and property."",
+  ""key_entities"": [""이해찬"", ""더불어""],
+  ""confidence_score"": 0.6
+}",Didn't Answered
+4RPwedjxEvE,448,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Singer Lee Jung-seok's defense of Cho Jin-woong and critique of critics."",
+  ""key_entities"": [""조진웅"", ""이정석""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+uufFVGZSl-M,460,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""국민힘이 계엄시대 사과를 진행하고 현역 지자체장이 참여한 사실을 전달"",
+  ""key_entities"": [""국민힘"", ""지자체장""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+Evu9WK_fVXc,498,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""reporting on the controversy that emerged after the confirmation of staying in Ulsan, involving allegations of assault and a statement about Seunghyun being a disciple"",
+  ""key_entities"": [""승현이"", ""울산""],
+  ""confidence_score"": 0.7
+}",Didn't Answered
+HBguzEN1Q0E,519,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""To discuss the criticism of Munmyeonhwa for being slow and his newly written work titled 'Today's Masterpiece'."",
+  ""key_entities"": [""문명화""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+vNAQCbo7Qz0,527,timed out,"{
+  ""content_tone"": 1,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+RNsv_5d3oNg,608,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Explain the historical reasons for the eradication of Christianity in Japan, focusing on religious persecution during the Sengoku period and the Edo shogunate."",
+  ""key_entities"": [""일본"", ""기독교"", ""전국시대"", ""에도막부""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+ZICCDW8q32Q,618,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Explain the process that led to Somalia's collapse"",
+  ""key_entities"": [""Somalia""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+BWeWmAA5cZQ,635,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""전쟁이 손해 보는 장사가 된 이유와 1차대전 참호전의 충격적인 사실을 설명하고자 함"",
+  ""key_entities"": [""1차대전""],
+  ""confidence_score"": 0.7
+}",Didn't Answered
+0iCYvondcLM,734,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""To announce that the party scandal has ended with Han Dong-hoon's involvement."",
+  ""key_entities"": [""한동훈""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+OwK6r5VPDew,767,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Yoo Si-min’s warning about a video was acknowledged by the presidential office."",
+  ""key_entities"": [""유시민"", ""대통령실""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+S-0bVM53was,769,timed out,Didn't Answered,"{
+  ""recovered_intent"": ""Yoon Suk-yeol’s angry statement and explosive testimony that caused a court to flip"",
+  ""comment_tone"": 9,
+  ""is_contaminated"": true,
+  ""context_bridge"": ""The video title centers on Yoon Suk-yeol’s statement, but the comments overwhelmingly criticize Judge Ji Gwi-yeon’s conduct, showing a clear mismatch between the intended topic and the audience reaction."",
+  ""representative_comments"": [
+    ""지귀연은 이 사건의 심각성을 아예 못 느끼고 있다"",
+    ""판사 진짜 자격없다 특판 꼭 가자"",
+    ""내란 재판부가 시급하다"",
+    ""지귀연 감사은 무순??토를 단다??진짜 스스로 책임감은 있는건가??"",
+    ""판사가 변호사를 설득하고 있다. 개난장이네. 내란재판부가 답이다!!""
+  ]
+}"
+-dmLlrQdJ4M,806,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""국민의힘이 한동훈 가족 정보를 확인하도록 요구하고, 친한계가 인격살인이라고 주장한 사건을 보도"",
+  ""key_entities"": [""국민의힘"", ""한동훈"", ""친한계"", ""내홍""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+yVot_4ugtFw,809,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Li government shifting focus to Taiwan and provoking Dokdo, and taking first conciliatory stance towards Japan."",
+  ""key_entities"": [""중국 정부"", ""대만"", ""독도"", ""일본""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+LXGUoAzNsIE,821,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""Show Kim Gun-mo reacting in a way that makes him speechless."",
+  ""key_entities"": [""김건모""],
+  ""confidence_score"": 0.7
+}",Didn't Answered
+lPGNKhNT3Ws,879,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""The video reveals a secret about a top‑grade hand that was trained, which is considered weird."",
+  ""key_entities"": [],
+  ""confidence_score"": 0.4
+}",Didn't Answered
+iVWrxcrraW8,919,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""Report on the Unification Church recording file revealing an attempt to contact Jeong Jin-sang, including Na Kyung-won's direct call, and the court's 'Yukseong' disclosure."",
+  ""key_entities"": [""통일교"", ""정진상"", ""나경원"", ""재판서""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+MhXBmLKbFik,921,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""In Yohan's resignation from his parliamentary seat and his strong statement to the National Party."",
+  ""key_entities"": [""인요한"", ""국민의힘""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+znUYsTkHcqI,971,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.4
+}",Didn't Answered
+DnjY9PH3MLE,1019,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""전달하려는 핵심 메시지는 1인 가구가 800만 명을 넘어섰으며, 과반수는 외롭지 않다고 응답했다는 사실을 알리는 것"",
+  ""key_entities"": [""1인 가구""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+H1zQ9JnNyTE,1025,timed out,"{
+  ""content_tone"": 3,
+  ""intent"": ""Report on Na Kyung-won's use of a wireless microphone during a filibuster that began with conflict."",
+  ""key_entities"": [""나경원""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+ddy4hacHzk4,1194,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Explaining the resignation of National People Power Party member In Yohan over Yoon Seok-yeol's politics and the cold reaction from netizens."",
+  ""key_entities"": [""윤석열"", ""국민의힘"", ""인요한""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+BtmDYY8osmA,1244,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [""김용민"", ""김완"", ""오혁진"", ""김승원"", ""노영희"", ""신용한"", ""주진우"", ""박종찬"", ""주식아가방"", ""겸손공장""],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+NINdCcyUduA,1253,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""Coupang's lawsuit against its US headquarters and critique of media coverage by Jo Jin-woong, Park Na-rae, and Jo Se-ho."",
+  ""key_entities"": [""정준희"", ""쿠팡"", ""조진웅"", ""박나래"", ""조세호""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+r1G0-zA4Aw0,1379,timed out,"{
+  ""content_tone"": 8,
+  ""intent"": ""Providing breaking news coverage of multiple political and military events, including Minister Jeon Jae-soo's fall, An Busu's arrest warrant dismissal, 707 Special Task Force leader's testimony causing opposition flip, US retaliation, and Osaek base entrance control revocation."",
+  ""key_entities"": [""전재수 장관"", ""안부수"", ""707특임단장"", ""Opposition"", ""미국"", ""오산기지""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+UsstrItJemE,1401,timed out,Didn't Answered,"{
+  ""recovered_intent"": ""김민석이 서울시에 문제를 제기하고 ‘받들어 총’ 사건에 대한 경위 설명을 요구하는 내용 전달"",
+  ""comment_tone"": 3,
+  ""is_contaminated"": false,
+  ""context_bridge"": ""영상 주제와 댓글이 전혀 일치하지 않음. 댓글은 거없 채널 부활을 축하하는 내용으로, 영상의 정치적 이슈와 무관하다."",
+  ""representative_comments"": [
+    ""거없 채널 부활 축하드려요^^"",
+    ""거없 님 축하드립니다 !!!!"",
+    ""거없의 부활한 채널, 신설한 채널 모두 구독한 사람으로서 넘넘 축하합니다!!!"",
+    ""거없 채널 부활 ㅊㅋㅊㅋ. 더 놀려먹어야하는데 살짝 아쉬움"",
+    ""거없 님 채널 둘다 구독했는데 다 유지할께요 거없님 내린머리보다 지금 헤어스타일이 훨씬 더 잘 어울리네요""
+  ]
+}"
+J1nX3zsaBjs,1449,timed out,"{
+  ""content_tone"": 1,
+  ""intent"": ""Apologizing for a mistake or wrongdoing"",
+  ""key_entities"": [""사망여우""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+UTJBrDsQH68,1453,timed out,"{
+  ""content_tone"": 1,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+M-kN_b5Z7LA,1456,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.3
+}",Didn't Answered
+xBZOgA5W9GQ,1462,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""사기 업체를 폭로하고 시청자에게 경고"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.75
+}",Didn't Answered
+zBd5RxilAzk,1467,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.3
+}",Didn't Answered
+BxtwwLjOPLE,1468,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+jJ4bF0UzBu4,1469,timed out,"{
+  ""content_tone"": 1,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+yNNv2uXeySI,1474,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [""경찰""],
+  ""confidence_score"": 0.3
+}",Didn't Answered
+pVn7np-yJRM,1477,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""INSUFFICIENT"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.2
+}",Didn't Answered
+6r0vrHpBeBQ,1487,timed out,"{
+  ""content_tone"": 2,
+  ""intent"": ""Explaining the motivations for continuing to produce YouTube content despite challenges."",
+  ""key_entities"": [],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+RSRquHcQF4k,1489,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""Expose a scam company and educate viewers about the fraud"",
+  ""key_entities"": [],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+qxYBiXMBH5A,1590,timed out,"{
+  ""content_tone"": 8,
+  ""intent"": ""박형명 변호사의 법왜곡죄에 대한 강력한 비판과 법 왜곡 결정권에 대한 의문 제기"",
+  ""key_entities"": [""박형명""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+jBmEAPvAGS0,1721,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""Report on sanctions affecting Putin's finances and the opening of land and sea routes, highlighting the impact on Russia's economy."",
+  ""key_entities"": [""푸틴""],
+  ""confidence_score"": 0.7
+}",Didn't Answered
+Q8TSy33hCI8,1764,timed out,"{
+  ""content_tone"": 5,
+  ""intent"": ""Criticize South Korean military and police for trivializing or mocking something, and call on China to observe basic courtesy."",
+  ""key_entities"": [""South Korean military"", ""South Korean police"", ""China""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+66WhKkui2Qc,1889,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""공수처가 조희대 대법원장에 직권남용 혐의로 입건한 사실과 고발 내용 전달"",
+  ""key_entities"": [""공수처"", ""조희대"", ""대법원장""],
+  ""confidence_score"": 0.9
+}",Didn't Answered
+qRTxJfTblV8,1926,timed out,"{
+  ""content_tone"": 7,
+  ""intent"": ""Park Narae's big scandal that was previously denied has now been revealed"",
+  ""key_entities"": [""박나래""],
+  ""confidence_score"": 0.6
+}",Didn't Answered
+bRTOgjW_MRw,1953,timed out,"{
+  ""content_tone"": 7,
+  ""intent"": ""Han Dong-hoon's political career ends; the party audit committee announces shocking news; Jang Ye-chan returns."",
+  ""key_entities"": [""한동훈"", ""당무감사위"", ""장예찬""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+lxAGp-vVZ14,1958,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""정청래의 당에서의 급격한 왕따와 그에 따른 전락 상황을 전달"",
+  ""key_entities"": [""정청래""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+skHCZmIygeU,1973,timed out,"{
+  ""content_tone"": 8,
+  ""intent"": ""US scholar's shocking statement about Lee Jae-myung causing international humiliation"",
+  ""key_entities"": [""미국"", ""이재명""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+LnLQXhRprcA,2009,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""To announce that the mother association has taken bold action, the 'barehanded revolution', and to convey the emotional impact."",
+  ""key_entities"": [""정태숙"", ""무궁화 어머니회""],
+  ""confidence_score"": 0.85
+}",Didn't Answered
+fD94J4VtLho,2064,timed out,"{
+  ""content_tone"": 6,
+  ""intent"": ""Present a lecture arguing that Park Chung-hee’s era contributed to democratization"",
+  ""key_entities"": [""박정희""],
+  ""confidence_score"": 0.8
+}",Didn't Answered
+zmR4kIohh3Y,2095,timed out,"{  
+  ""content_tone"": 4,  
+  ""intent"": ""Providing reasons for the anticipated downfall of Lee Jae-myung"",  
+  ""key_entities"": [""이재명""],  
+  ""confidence_score"": 0.9  
+}",Didn't Answered
+Cw4lTI2WGzs,2099,timed out,"{
+  ""content_tone"": 4,
+  ""intent"": ""To question whether the situation being discussed is caused by 서학개미."",
+  ""key_entities"": [""서학개미""],
+  ""confidence_score"": 0.7
+}",Didn't Answered
