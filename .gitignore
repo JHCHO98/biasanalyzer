@@ -1,4 +1,8 @@
 .venv/
+models/.cache/
+.env
+.env.*
+!.env.example
 *.bin
 *.pt
 *.txt

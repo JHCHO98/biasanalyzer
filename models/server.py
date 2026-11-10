@@ -1,5 +1,11 @@
 import os
 import sys
+if __package__:
+    from .settings import load_project_env
+else:
+    from settings import load_project_env
+load_project_env()
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -46,13 +52,25 @@ class KCELectraClassifier(nn.Module):
 
 app = FastAPI(title="BiasAnalyzer Demo Backend")
 
-# Enable CORS for React frontend (defaulting to localhost:3000)
+if __package__:
+    from .embedding_api import router as embedding_router
+    from .llm_api import router as llm_router
+else:
+    from embedding_api import router as embedding_router
+    from llm_api import router as llm_router
+app.include_router(embedding_router)
+app.include_router(llm_router)
+
+# Only the configured frontend may invoke the API from a browser.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[origin.strip() for origin in os.getenv(
+        'FRONTEND_ORIGINS',
+        'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3100,http://127.0.0.1:3100',
+    ).split(',') if origin.strip()],
+    allow_credentials=False,
+    allow_methods=['POST'],
+    allow_headers=['Content-Type'],
 )
 
 # Constants & Configurations
@@ -267,4 +285,4 @@ async def analyze(request: AnalysisRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host=os.getenv('BIASANALYZER_HOST', '127.0.0.1'), port=5000)
