@@ -1,7 +1,5 @@
 # BiasAnalyzer: Deep Learning-Based Video Consumption & Confirmation Bias Diagnosis Tool 📊
 
-> **딥러닝으로 분석하는 영상 시청 패턴과 확증편향: 콘텐츠 진단 모델 기반의 확증 편향 자각 도구 구현**
-
 본 프로젝트는 사용자의 유튜브 시청 기록을 기반으로 미디어 소비 패턴의 관심사를 정밀 분류하고, 추천 알고리즘에 의해 심화되는 정치적 확증편향 및 '필터 버블(Filter Bubble)' 현상을 정량적으로 진단·시각화하여 사용자의 '편향 맹점(Bias Blind Spot)' 극복을 돕는 **2단계 딥러닝 분석 파이프라인 기반 웹 시스템**입니다.
 
 ---
